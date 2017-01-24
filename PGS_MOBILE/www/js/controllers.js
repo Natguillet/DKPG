@@ -69,6 +69,26 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
         }
   ];
 })
+.controller('StocksCtrl',function($scope){
+  console.log("stocksctrl");
+  $scope.stocks=[
+
+      {
+          title: 'Doliprane',
+          id: 1,
+          nb:20,
+          date:"20/11/16"
+      },
+      {
+          title: 'Dolirhume',
+          id: 2,
+          nb:10,
+          date:"20/12/17"
+      }
+
+    ];
+})
+.controller('StockCtrl', function ($scope, $stateParams) {})
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {});
 
@@ -77,7 +97,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
     $scope.logs = pouchCollection(dbName);
 
 $scope.newLog = function(loginData){
-    
+
 }
 
 

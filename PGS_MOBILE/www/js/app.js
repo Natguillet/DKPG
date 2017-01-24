@@ -40,12 +40,21 @@ angular.module('starter', ['ionic', 'starter.controllers'])
             }
         }
     })
-
-    .state('app.stock', {
-        url: '/stock',
+    .state('app.stocks', {
+        url: '/stocks',
         views: {
             'menuContent': {
-                templateUrl: 'templates/stock.html'
+                templateUrl: 'templates/stocks.html',
+                controller: 'StocksCtrl'
+            }
+        }
+    })
+    .state('app.medicament', {
+        url: '/stocks/:stockTitle',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/stock.html',
+                controller: 'StockCtrl'
             }
         }
     })
@@ -60,7 +69,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
         }
     })
 
-    .state('app.single', {
+    .state('app.singles', {
         url: '/playlists/:playlistId',
         views: {
             'menuContent': {
