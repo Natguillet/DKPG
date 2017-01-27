@@ -1,0 +1,14 @@
+<ion-view view-title="stocks">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="stock in stocks" href="#/app/stocks/{{stock.id}}">
+        
+        <div class="row">
+  <div class="col">{{stock.title}}</div>
+  <div class="col">{{stock.date}}</div>
+  <div class="col">{{stock.nb}}</div>
+</div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
