@@ -98,14 +98,16 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
       {
           title: 'Doliprane',
           id: 1,
-          nb:20,
-          date:"20/11/16"
+          nb:6,
+          date:"20/11/16",
+          quantite: 0
       },
       {
           title: 'Dolirhume',
           id: 2,
           nb:10,
-          date:"20/12/17"
+          date:"20/12/17",
+          quantite: 0
       }
 
     ];
@@ -113,16 +115,37 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
     var select =[];
 
     $scope.clearSearch = function() {
-    $scope.search = '';
+    $scope.text = '';
   };
   $scope.choixMedic = function(){
-    console.log("salut");
-    select =$scope.select = stocks[0];
+    select =$scope.select = stocks[0];//Choix en dure d'un médicament
+  };
+  $scope.choixMedic2 = function(){
+    select =$scope.select = stocks[1]; //Choix en dure d'un médicament
   };
   $scope.ajouter = function(){
-    console.log(panier);
-    select.nb -=1;
-    panier.push(select);
+    for (var i = 0; i < panier.length; i++) {
+      if(panier[i].id === select.id){
+        return;
+      }
+    }
+    if(select.length != 0){
+      console.log(panier);
+      select.quantite = 1;
+      panier.push(select);
+    }
+  };
+  $scope.plus = function(medic){
+    medic.quantite++;
+  };
+  $scope.moins = function(medic){
+    if(medic.quantite >1) medic.quantite--;
+  };
+  $scope.supprimer = function(medic){
+    $scope.panier.splice($scope.panier.indexOf(medic),1);
+  };
+  $scope.condition = function(medic){
+    return $scope.medic
   };
 });
 

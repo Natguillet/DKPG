@@ -19,27 +19,44 @@
   <button class="button button-avanced button-block" ng-click="choixMedic()">
     Medicament
   </button>
+  <button class="button button-avanced button-block" ng-click="choixMedic2()">
+    Medicament2
+  </button>
   <button class="button button-balanced button-block" ng-click="ajouter()">
     Ajouter
   </button>
   <div class="list card">
-    <ion-item ng-repeat="medic in panier">
+    <ion-item ng-repeat="medic in panier" item="medic">
       <div class="row">
         <div class="col">{{medic.title}}</div>
         <div class="col">{{medic.date}}</div>
-        <div class="col">{{medic.nb}}</div>
+        <div class="col"><span
+          ng-class=
+          "{'balanced-bg balanced-border':medic.nb >=10,
+          'energized-bg energized-border':medic.nb<10 && medic.nb>=5,
+          'assertive-bg assertive-border':medic.nb<5}"
+          style="
+          color:white;
+          border-radius:4px;
+          border-width:1px;
+          border-style:solid;
+          padding:0 12px;">
+          Stock : {{medic.nb}}</span>
+        </div>
+      </div>
+      <div class="row">
         <div class="col">
-          <button class="button button-assertive" ng-click="supprimer()">
+          <button class="button button-small button-assertive" ng-click="supprimer(medic)">
             Supprimer
           </button>
         </div>
         <div class="col">
-          <select>
-            <option>Blue</option>
-            <option selected>Green</option>
-            <option>Red</option>
-          </select>
+          <button class="button button-icon icon ion-minus-round" ng-click="moins(medic)"></button>
         </div>
+        <div class="col">
+          <button class="button button-icon icon ion-plus-round" ng-click="plus(medic)"></button>
+        </div>
+        <div class="col">Quantité : {{medic.quantite}}</div>
       </div>
     </ion-item>
   </div>
