@@ -90,7 +90,41 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
 })
 .controller('StockCtrl', function ($scope, $stateParams) {})
 
-.controller('PlaylistCtrl', function ($scope, $stateParams) {});
+.controller('PlaylistCtrl', function ($scope, $stateParams) {})
+
+.controller('PharmacieCtrl',function($scope){
+  var stocks = $scope.stocks=[
+
+      {
+          title: 'Doliprane',
+          id: 1,
+          nb:20,
+          date:"20/11/16"
+      },
+      {
+          title: 'Dolirhume',
+          id: 2,
+          nb:10,
+          date:"20/12/17"
+      }
+
+    ];
+    var panier = $scope.panier=[];
+    var select =[];
+
+    $scope.clearSearch = function() {
+    $scope.search = '';
+  };
+  $scope.choixMedic = function(){
+    console.log("salut");
+    select =$scope.select = stocks[0];
+  };
+  $scope.ajouter = function(){
+    console.log(panier);
+    select.nb -=1;
+    panier.push(select);
+  };
+});
 
 /*.controller('registerLogin', function ($scope, $ionicPopup, $ionicListDelegate, pouchCollection)) {
     var dbName = 'login-storage';
