@@ -1,0 +1,3 @@
+[{"id":"1","quantite":"5","nomM":"Doliprane","prix":"5","dosage":"2","quantite_disp_boite":"15","DCI_nom":"dol","unit_prescription":"2","forme":"comprime","sous_ordonnance":"non","unit_disp":"3","unit_condition":"2","quantite_min_1":"0","quantite_min_2":"3"},
+  {"id":"2","quantite":"3","nomM":"aspirine","prix":"8","dosage":"2","quantite_disp_boite":"15","DCI_nom":"asp","unit_prescription":"1","forme":"comprime","sous_ordonnance":"non","unit_disp":"6","unit_condition":"4","quantite_min_1":"1","quantite_min_2":"5"},
+  {"id":"3","quantite":"15","nomM":"smecta","prix":"15","dosage":"1","quantite_disp_boite":"10","DCI_nom":"sme","unit_prescription":"4","forme":"sachet","sous_ordonnance":"oui","unit_disp":"4","unit_condition":"2","quantite_min_1":"0","quantite_min_2":"2"}]

@@ -69,30 +69,32 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
         }
   ];
 })
-.controller('StocksCtrl',function($scope){
-  console.log("stocksctrl");
-  $scope.stocks=[
-
-      {
-          title: 'Doliprane',
-          id: 1,
-          nb:20,
-          date:"20/11/16"
-      },
-      {
-          title: 'Dolirhume',
-          id: 2,
-          nb:10,
-          date:"20/12/17"
+.controller('StocksCtrl',function($scope,$http,$ionicFilterBar){
+  $scope.stocks =[];
+  $http.get('data/medicjson.json').success(function(data){
+     $scope.stocks = data;
+     console.log($scope.stocks);
+   });
+  $scope.showFilterBar = function () {
+    var filterBarInstance = $ionicFilterBar.show({
+      cancelText: "<i class='ion-ios-close-outline'></i>",
+      items: $scope.stocks,
+      filterProperties: ['nomM'],
+      update: function (filteredItems, filterText) {
+        $scope.stocks = filteredItems;
       }
-
-    ];
+    });
+  };
 })
 .controller('StockCtrl', function ($scope, $stateParams) {})
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
-.controller('PharmacieCtrl',function($scope){
+.controller('PharmacieCtrl',function($scope,$http){
+  $http.get('data/medicjson.json').success(function(data){
+    $scope.medicsVar = data;
+    console.log(data);
+  })
   var stocks = $scope.stocks=[
 
       {
