@@ -91,32 +91,18 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
 .controller('PharmacieCtrl',function($scope,$http){
+  var stocks = [];
+  var panier = $scope.panier=[];
+  var select =[];
   $http.get('data/medicjson.json').success(function(data){
-    $scope.medicsVar = data;
+    $scope.stocks = data;
     console.log(data);
+    stocks =data;
+    console.log(stocks);
   })
-  var stocks = $scope.stocks=[
 
-      {
-          title: 'Doliprane',
-          id: 1,
-          nb:6,
-          date:"20/11/16",
-          quantite: 0
-      },
-      {
-          title: 'Dolirhume',
-          id: 2,
-          nb:10,
-          date:"20/12/17",
-          quantite: 0
-      }
 
-    ];
-    var panier = $scope.panier=[];
-    var select =[];
-
-    $scope.clearSearch = function() {
+  $scope.clearSearch = function() {
     $scope.text = '';
   };
   $scope.choixMedic = function(){
@@ -133,15 +119,20 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
     }
     if(select.length != 0){
       console.log(panier);
-      select.quantite = 1;
+      select.nb = 1;
       panier.push(select);
     }
   };
   $scope.plus = function(medic){
-    medic.quantite++;
+    medic.nb++;
+    medic.quantite--;
   };
   $scope.moins = function(medic){
-    if(medic.quantite >1) medic.quantite--;
+    if(medic.nb >1)
+    {
+      medic.nb--;
+      medic.quantite++;
+    }
   };
   $scope.supprimer = function(medic){
     $scope.panier.splice($scope.panier.indexOf(medic),1);

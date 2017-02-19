@@ -12,9 +12,9 @@
     </label>
   </div>
   <div class="list card" type="select" ng-model="select">
-    {{select.title}}
-    {{select.nb}}
-    {{select.date}}
+    {{select.nomM}}
+    {{select.quantite}}
+    {{select.DCI_nom}}
   </div>
   <button class="button button-avanced button-block" ng-click="choixMedic()">
     Medicament
@@ -28,20 +28,20 @@
   <div class="list card">
     <ion-item ng-repeat="medic in panier" item="medic">
       <div class="row">
-        <div class="col">{{medic.title}}</div>
-        <div class="col">{{medic.date}}</div>
+        <div class="col">{{medic.nomM}}</div>
+        <div class="col">{{medic.DCI_nom}}</div>
         <div class="col"><span
           ng-class=
-          "{'balanced-bg balanced-border':medic.nb >=10,
-          'energized-bg energized-border':medic.nb<10 && medic.nb>=5,
-          'assertive-bg assertive-border':medic.nb<5}"
+          "{'balanced-bg balanced-border':medic.quantite >=10,
+          'energized-bg energized-border':medic.quantite<10 && medic.quantite>=5,
+          'assertive-bg assertive-border':medic.quantite<5}"
           style="
           color:white;
           border-radius:4px;
           border-width:1px;
           border-style:solid;
           padding:0 12px;">
-          Stock : {{medic.nb}}</span>
+          Stock : {{medic.quantite}}</span>
         </div>
       </div>
       <div class="row">
@@ -56,7 +56,7 @@
         <div class="col">
           <button class="button button-icon icon ion-plus-round" ng-click="plus(medic)"></button>
         </div>
-        <div class="col">Quantité : {{medic.quantite}}</div>
+        <div class="col">Quantité : {{medic.nb}}</div>
       </div>
     </ion-item>
   </div>
