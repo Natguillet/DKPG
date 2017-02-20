@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['ionic', 'pouchdb'])
+ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file'])
 
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
 
@@ -90,7 +90,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
-.controller('PharmacieCtrl',function($scope,$http, $ionicPopup){
+.controller('PharmacieCtrl',function($scope,$http, $ionicPopup,$cordovaFile){
   var stocks = [];
   var panier = $scope.panier=[];
   var select =[];
@@ -113,12 +113,12 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
   };
   $scope.ajouter = function(){
     for (var i = 0; i < panier.length; i++) {
-      if(panier[i].id === select.id){
+      if($scope.panier[i].id === $scope.select.id){
         return;
       }
     }
-    if(select.length != 0){
-      if(select.sous_ordonnance === "oui"){
+    if($scope.select.length != 0){
+      if($scope.select.sous_ordonnance === "oui"){
         var alertPopup = $ionicPopup.alert({
           title: 'Médicament avec ordonnance',
           template: 'Il faut ouvrir un dossier patient.'
@@ -128,9 +128,9 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
         });
         return;
       }
-      console.log(panier);
-      select.nb = 1;
-      panier.push(select);
+      $scope.select.quantite--;
+      $scope.select.nb = 1;
+      $scope.panier.push(select);
     }
   };
   $scope.plus = function(medic){
@@ -156,25 +156,48 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
     }
   };
   $scope.supprimer = function(medic){
+    var index = $scope.panier.indexOf(medic);
+    $scope.panier[index].quantite += $scope.panier[index].nb;
     $scope.panier.splice($scope.panier.indexOf(medic),1);
   };
   $scope.condition = function(medic){
     return $scope.medic
   };
   $scope.valider = function(){
+    var modifs =[];
     for (var i = 0; i < $scope.panier.length; i++) {
-      delete $scope.panier[i].nb;
-      for (var j = 0; j < $scope.stocks.length; j++) {
-        if($scope.stocks[j].id === $scope.panier[i].id)$scope.stocks[j]=$scope.panier[i];
-      }
+      var modif = {
+        "quantite":0,
+        "id_medic":0,
+        "id_lot":0
+      };
+      modif.quantite = $scope.panier[i].nb;
+      modif.id_medic= $scope.panier[i].id;
+      //modif.id_lot = $scope.panier[i].id_lot;
+      modifs[i] = modif;
     }
-    $scope.panier = [];
-    console.log($scope.stocks);
-    var data = $scope.stocks;
-    var filename = 'medicjson.json';
-    if (typeof data === 'object') {
-    data = JSON.stringify(data, undefined, 2);
-  }
+    panier = $scope.panier = [];
+    console.log(JSON.stringify(modifs));
+    var filename = 'modif.txt';
+    $cordovaFile.createFile('cordova.file.dataDirectory', filename, JSON.stringify(modifs), true)
+  .then(function (success) {
+    // success
+    console.log("Création réussite");
+    var alertPopup = $ionicPopup.alert({
+      title: 'GGGGGGG',
+      template: 'OUIIIIIIIIII'
+    });
+    alertPopup.then(function(res) {
+    });
+  }, function (error) {
+    var alertPopup = $ionicPopup.alert({
+      title: 'Echec',
+      template: error
+    });
+    alertPopup.then(function(res) {
+    });
+    console.log(error); //error mappings are listed in the documentation
+  });
   };
 });
 
