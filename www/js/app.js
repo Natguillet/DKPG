@@ -32,14 +32,6 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
         controller: 'AppCtrl'
     })
 
-    .state('app.search', {
-        url: '/search',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/search.html'
-            }
-        }
-    })
     .state('app.stocks', {
         url: '/stocks',
         views: {
