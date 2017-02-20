@@ -86,6 +86,14 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
                 controller: 'PharmacieCtrl'
             }
         }
+    })
+    .state('app.alert', {
+        url: '/alert',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/alert.html'
+            }
+        }
     });
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/app/playlists');
