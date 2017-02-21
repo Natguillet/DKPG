@@ -86,7 +86,26 @@
     });
   };
 })
-.controller('StockCtrl', function ($scope, $stateParams) {})
+.controller('StockCtrl', function ($scope,$http, $stateParams) {
+  $scope.stocks =[];
+  $http.get('data/medicjson.json').success(function(data){
+    $scope.stocks = data;
+
+  });
+
+//  console.log($stateParams);
+  $scope.stateParams={};
+  $scope.stateParams=$stateParams;
+  $scope.intitule=["ID:","Quantité:","Nom du médicament:","Prix:",
+  "Dosage:","Quantité de dispensation dans une boite:","Nom DCI:",
+  "Unité de prescription:","Forme:","Médicament sous ordonnance?",
+  "Unité de dispensation:","Unité de conditionnement:","Quantité minimum 1:",
+  "Quantité minimum 2:"];
+  //meme ordre que le JSON
+//id quantité nomM
+//prix dosage quantitedispboite
+//...
+})
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
