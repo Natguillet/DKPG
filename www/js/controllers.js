@@ -1,5 +1,6 @@
  angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select'])
 
+
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
 
   // With the new view caching in Ionic, Controllers are only called
@@ -86,6 +87,51 @@
     });
   };
 })
+
+.controller('AlertCtrl',function($scope,$http){git
+  var data =
+  {
+    'quantite': '2'
+  }
+  var config =
+  {
+  headers :
+{
+  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+ }
+   }
+  $scope.alert = function(){
+  $http.post('http://localhost/PGS/PGS_WEB/update2.php', data, config)
+   .then(
+       function(response){
+         // success callback
+         alert("data.quantite");
+       },
+       function(response){
+         // failure callback
+         alert("Pas ok");
+       }
+    );
+  };
+})
+/*
+   $scope.alert = function ($scope) {
+    $http({
+        url: 'http://localhost/PGS/PGS_WEB/update2.php',
+        method: "POST",
+        data: { 'message' : "coucou"}
+    })
+    .then(function(response) {
+            // success
+            alert("OK");
+    },
+    function(response) { // optional
+            // failed
+            alert("NONOK");
+    });
+};
+})
+*/
 .controller('StockCtrl', function ($scope,$http, $stateParams) {
   $scope.stocks =[];
   $http.get('data/medicjson.json').success(function(data){
@@ -108,7 +154,7 @@
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
-.controller('PharmacieCtrl',function($scope,$http, $ionicPopup,$cordovaFile){
+.controller('PharmacieCtrl',function($scope,$http, $ionicPopup){
   var stocks = [];
   var panier = $scope.panier=[];
   var select =[];
@@ -125,7 +171,7 @@
   }
   $scope.ajouter = function(){
     for (var i = 0; i < panier.length; i++) {
-      if($scope.panier[i].id === $scope.select.id){
+      if(panier[i].id === select.id){
         return;
       }
     }
@@ -168,25 +214,17 @@
     }
   };
   $scope.supprimer = function(medic){
-    var index = $scope.panier.indexOf(medic);
-    $scope.panier[index].quantite += $scope.panier[index].nb;
     $scope.panier.splice($scope.panier.indexOf(medic),1);
   };
   $scope.condition = function(medic){
     return $scope.medic
   };
   $scope.valider = function(){
-    var modifs =[];
     for (var i = 0; i < $scope.panier.length; i++) {
-      var modif = {
-        "quantite":0,
-        "id_medic":0,
-        "id_lot":0
-      };
-      modif.quantite = $scope.panier[i].nb;
-      modif.id_medic= $scope.panier[i].id;
-      //modif.id_lot = $scope.panier[i].id_lot;
-      modifs[i] = modif;
+      delete $scope.panier[i].nb;
+      for (var j = 0; j < $scope.stocks.length; j++) {
+        if($scope.stocks[j].id === $scope.panier[i].id)$scope.stocks[j]=$scope.panier[i];
+      }
     }
     panier = $scope.panier = [];
     console.log(JSON.stringify(modifs));
