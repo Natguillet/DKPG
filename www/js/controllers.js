@@ -1,4 +1,5 @@
-angular.module('starter.controllers', ['ionic', 'pouchdb'])
+angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select'])
+
 
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
 
@@ -123,40 +124,40 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
   }
   var config =
   {
-  headers :
-{
-  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
- }
-   }
+    headers :
+    {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+    }
+  }
   $scope.alert = function(){
-  $http.post('http://localhost/PGS/PGS_WEB/update2.php', data, config)
-   .then(
-       function(response){
-         // success callback
-         alert("data.quantite");
-       },
-       function(response){
-         // failure callback
-         alert("Pas ok");
-       }
+    $http.post('http://localhost/PGS/PGS_WEB/update2.php', data, config)
+    .then(
+      function(response){
+        // success callback
+        alert("data.quantite");
+      },
+      function(response){
+        // failure callback
+        alert("Pas ok");
+      }
     );
   };
 })
 /*
-   $scope.alert = function ($scope) {
-    $http({
-        url: 'http://localhost/PGS/PGS_WEB/update2.php',
-        method: "POST",
-        data: { 'message' : "coucou"}
-    })
-    .then(function(response) {
-            // success
-            alert("OK");
-    },
-    function(response) { // optional
-            // failed
-            alert("NONOK");
-    });
+$scope.alert = function ($scope) {
+$http({
+url: 'http://localhost/PGS/PGS_WEB/update2.php',
+method: "POST",
+data: { 'message' : "coucou"}
+})
+.then(function(response) {
+// success
+alert("OK");
+},
+function(response) { // optional
+// failed
+alert("NONOK");
+});
 };
 })
 */
@@ -164,10 +165,9 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
   $scope.stocks =[];
   $http.get('data/medicjson.json').success(function(data){
     $scope.stocks = data;
-
   });
 
-//  console.log($stateParams);
+  //  console.log($stateParams);
   $scope.stateParams={};
   $scope.stateParams=$stateParams;
   $scope.intitule=["ID:","Quantité:","Nom du médicament:","Prix:",
@@ -176,14 +176,14 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
   "Unité de dispensation:","Unité de conditionnement:","Quantité minimum 1:",
   "Quantité minimum 2:"];
   //meme ordre que le JSON
-//id quantité nomM
-//prix dosage quantitedispboite
-//...
+  //id quantité nomM
+  //prix dosage quantitedispboite
+  //...
 })
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
-.controller('PharmacieCtrl',function($scope,$http, $ionicPopup){
+.controller('PharmacieCtrl',function($scope,$http, $ionicPopup, $cordovaFile){
   var stocks = [];
   var panier = $scope.panier=[];
   var select =[];
@@ -193,25 +193,19 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
     stocks =data;
     console.log(stocks);
   })
-
-
-  $scope.clearSearch = function() {
-    $scope.text = '';
-  };
-  $scope.choixMedic = function(){
-    select =$scope.select = stocks[0];//Choix en dure d'un médicament
-  };
-  $scope.choixMedic2 = function(){
-    select =$scope.select = stocks[2]; //Choix en dure d'un médicament
-  };
-  $scope.ajouter = function(){
+  $scope.shoutLoud = function(newValue, oldValue){
+    console.log(newValue);
+    $scope.select = newValue;
+    ajouter();
+  }
+  var ajouter = function(){
     for (var i = 0; i < panier.length; i++) {
       if(panier[i].id === select.id){
         return;
       }
     }
-    if(select.length != 0){
-      if(select.sous_ordonnance === "oui"){
+    if($scope.select != null){
+      if($scope.select.sous_ordonnance === "oui"){
         var alertPopup = $ionicPopup.alert({
           title: 'Médicament avec ordonnance',
           template: 'Il faut ouvrir un dossier patient.'
@@ -221,9 +215,9 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
         });
         return;
       }
-      console.log(panier);
-      select.nb = 1;
-      panier.push(select);
+      $scope.select.quantite--;
+      $scope.select.nb = 1;
+      $scope.panier.push($scope.select);
     }
   };
   $scope.plus = function(medic){
@@ -249,26 +243,47 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
     }
   };
   $scope.supprimer = function(medic){
+    var index = $scope.panier.indexOf(medic);
+    $scope.panier[index].quantite += $scope.panier[index].nb;
     $scope.panier.splice($scope.panier.indexOf(medic),1);
   };
-  $scope.condition = function(medic){
-    return $scope.medic
-  };
   $scope.valider = function(){
+    var modifs =[];
     for (var i = 0; i < $scope.panier.length; i++) {
-      delete $scope.panier[i].nb;
-      for (var j = 0; j < $scope.stocks.length; j++) {
-        if($scope.stocks[j].id === $scope.panier[i].id)$scope.stocks[j]=$scope.panier[i];
-      }
+      var modif = {
+        "quantite":0,
+        "id_medic":0,
+        "id_lot":0
+      };
+      modif.quantite = $scope.panier[i].nb;
+      modif.id_medic= $scope.panier[i].id;
+      //modif.id_lot = $scope.panier[i].id_lot;
+      modifs[i] = modif;
     }
-    $scope.panier = [];
-    console.log($scope.stocks);
-    var data = $scope.stocks;
-    var filename = 'medicjson.json';
-    if (typeof data === 'object') {
-    data = JSON.stringify(data, undefined, 2);
-  }
-  };
+    panier = $scope.panier = [];
+    console.log(JSON.stringify(modifs));
+    var filename = 'modif.txt';
+    $cordovaFile.createFile('cordova.file.dataDirectory', filename, JSON.stringify(modifs), true)
+    .then(function (success) {
+      // success
+      console.log("Création réussite");
+      var alertPopup = $ionicPopup.alert({
+        title: 'GGGGGGG',
+        template: 'OUIIIIIIIIII'
+      });
+      alertPopup.then(function(res) {
+      });
+    }, function (error) {
+      /*var alertPopup = $ionicPopup.alert({
+      title: 'Echec',
+      template: error
+    });
+    alertPopup.then(function(res) {
+  });
+  console.log(error); //error mappings are listed in the documentation
+  */
+});
+};
 });
 
 /*.controller('registerLogin', function ($scope, $ionicPopup, $ionicListDelegate, pouchCollection)) {
