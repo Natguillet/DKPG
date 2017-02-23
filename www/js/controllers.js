@@ -164,12 +164,12 @@ alert("NONOK");
     stocks =data;
     console.log(stocks);
   })
-  $scope.shoutLoud = function(newValue, oldValue){
+  $scope.salut = function(newValue){
     console.log(newValue);
     $scope.select = newValue;
     ajouter();
   }
-  var ajouter = function(){
+var ajouter = function(){
     for (var i = 0; i < panier.length; i++) {
       if(panier[i].id === select.id){
         return;
@@ -177,18 +177,25 @@ alert("NONOK");
     }
     if($scope.select != null){
       if($scope.select.sous_ordonnance === "oui"){
-        var alertPopup = $ionicPopup.alert({
-          title: 'Médicament avec ordonnance',
-          template: 'Il faut ouvrir un dossier patient.'
-        });
-        alertPopup.then(function(res) {
-          console.log('Thank you for not eating my delicious ice cream cone');
-        });
-        return;
+          /*var confirmPopup = $ionicPopup.confirm({
+            title: 'Consume Ice Cream',
+            template: 'Are you sure you want to eat this ice cream?'
+          });
+
+          confirmPopup.then(function(res) {
+            if(res) {
+              console.log('You are sure');
+            } else {
+              console.log('You are not sure');
+            }
+          });*/
+          alert($scope.select.nomM+" est sous ordonnance.\n Il faut ouvrir un dossier patient.");
       }
-      $scope.select.quantite--;
-      $scope.select.nb = 1;
-      $scope.panier.push($scope.select);
+      else {
+        $scope.select.quantite--;
+        $scope.select.nb = 1;
+        $scope.panier.push($scope.select);
+      }
     }
   };
   $scope.plus = function(medic){
