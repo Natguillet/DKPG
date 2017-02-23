@@ -41,6 +41,7 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
             }
         }
     })
+    
     .state('app.medicament', {
         url: '/stocks/:stockTitle',
         views: {
@@ -50,7 +51,35 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
             }
         }
     })
-
+    
+    .state('app.patients', {
+        url: '/patients',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/patients.html',
+                controller: 'PatientsCtrl'
+            }
+        }
+    })
+    .state('app.patient', {
+        url: '/patients/:patientTitle',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/patient.html',
+                controller: 'PatientCtrl'
+            }
+        }
+    })
+    .state('app.creation_patient', {
+        url: '/creation_patient',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/creation_patient.html',
+                controller: 'CreationPatientCtrl'
+            }
+        }
+    })
+    
     .state('app.playlists', {
         url: '/playlists',
         views: {

@@ -1,0 +1,23 @@
+<ion-view view-title="patient">
+  <ion-content>
+    <h1>{{patients[stateParams.patientTitle-1].nom}}</h1>
+
+
+    <ion-list>
+      <ion-item ng-repeat="machin in patients[stateParams.patientTitle-1]" >
+
+        <div class="row">
+          <div class="col">{{intitule[$index]}}</div>
+          <div class="col">{{machin}}</div>
+
+        </div>
+
+      </ion-item>
+    </ion-list>
+
+
+
+
+
+  </ion-content>
+</ion-view>
