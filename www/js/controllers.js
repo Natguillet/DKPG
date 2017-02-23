@@ -40,6 +40,34 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
     }, 1000);
   };
 })
+.controller('CreationPatientCtrl', function ($scope,$stateParams) {
+   $scope.go = function ( path ) {
+    $location.path( path );
+  };
+})
+
+.controller('PatientCtrl', function ($scope,$http, $stateParams) {
+  $scope.patients =[];
+  $http.get('data/patient.json').success(function(data){
+    $scope.patients = data;
+
+  });
+//  console.log($stateParams);
+  $scope.stateParams={};
+  $scope.stateParams=$stateParams;
+  $scope.intitule=["ID:","Facteur:","Nom:","Prenom:",
+  "Adresse:","Email","Telephone:",
+  "Date de Naissance:","Lieu de Naissance:"," Notes Importantes"];
+ 
+})
+
+.controller('PatientsCtrl',function($scope,$http,$ionicFilterBar){
+  $scope.patients =[];
+  $http.get('data/patient.json').success(function(data){
+    $scope.patients = data;
+    console.log($scope.patients);
+  });
+  })
 
 .controller('PlaylistsCtrl', function ($scope) {
   $scope.playlists = [
@@ -75,6 +103,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
     $scope.stocks = data;
     console.log($scope.stocks);
   });
+
   $scope.showFilterBar = function () {
     var filterBarInstance = $ionicFilterBar.show({
       cancelText: "<i class='ion-ios-close-outline'></i>",
