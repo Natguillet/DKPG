@@ -167,9 +167,9 @@ alert("NONOK");
   $scope.shoutLoud = function(newValue, oldValue){
     console.log(newValue);
     $scope.select = newValue;
-    console.log($scope.select);
+    ajouter();
   }
-  $scope.ajouter = function(){
+  var ajouter = function(){
     for (var i = 0; i < panier.length; i++) {
       if(panier[i].id === select.id){
         return;
@@ -214,10 +214,9 @@ alert("NONOK");
     }
   };
   $scope.supprimer = function(medic){
+    var index = $scope.panier.indexOf(medic);
+    $scope.panier[index].quantite += $scope.panier[index].nb;
     $scope.panier.splice($scope.panier.indexOf(medic),1);
-  };
-  $scope.condition = function(medic){
-    return $scope.medic
   };
   $scope.valider = function(){
     var modifs =[];

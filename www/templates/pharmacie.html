@@ -8,14 +8,11 @@
     {{option.nomM}}
   </div>
   </button>
-  <div class="list card">
+  <!--<div class="list card">
     {{select.nomM}}
     {{select.quantite}}
     {{select.DCI_nom}}
-  </div>
-  <button class="button button-balanced button-block" ng-click="ajouter()">
-    Ajouter
-  </button>
+  </div>-->
   <div class="list card">
     <ion-item ng-repeat="medic in panier" item="medic">
       <div class="row">
@@ -51,7 +48,7 @@
       </div>
     </ion-item>
   </div>
-  <button class="button button-positive button-block" ng-click="valider()">
+  <button class="button button-balanced button-block" ng-click="valider()">
     Valider
   </button>
 </div>
