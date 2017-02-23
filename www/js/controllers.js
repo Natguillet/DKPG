@@ -86,6 +86,51 @@ angular.module('starter.controllers', ['ionic', 'pouchdb'])
     });
   };
 })
+
+.controller('AlertCtrl',function($scope,$http){
+  var data =
+  {
+    'quantite': '2'
+  }
+  var config =
+  {
+  headers :
+{
+  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+ }
+   }
+  $scope.alert = function(){
+  $http.post('http://localhost/PGS/PGS_WEB/update2.php', data, config)
+   .then(
+       function(response){
+         // success callback
+         alert(data.quantite);
+       },
+       function(response){
+         // failure callback
+         alert("Pas ok");
+       }
+    );
+  };
+})
+/*
+   $scope.alert = function ($scope) {
+    $http({
+        url: 'http://localhost/PGS/PGS_WEB/update2.php',
+        method: "POST",
+        data: { 'message' : "coucou"}
+    })
+    .then(function(response) {
+            // success
+            alert("OK");
+    },
+    function(response) { // optional
+            // failed
+            alert("NONOK");
+    });
+};
+})
+*/
 .controller('StockCtrl', function ($scope, $stateParams) {})
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})

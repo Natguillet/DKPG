@@ -83,7 +83,8 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
         url: '/alert',
         views: {
             'menuContent': {
-                templateUrl: 'templates/alert.html'
+                templateUrl: 'templates/alert.html',
+                  controller: 'AlertCtrl'
             }
         }
     });
