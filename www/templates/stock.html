@@ -1,5 +1,24 @@
 <ion-view view-title="stock">
   <ion-content>
-    <h1>stock</h1>
+    <h1>{{stocks[stateParams.stockTitle-1].nomM}}</h1>
+
+
+    <ion-list>
+      <ion-item ng-repeat="machin in stocks[stateParams.stockTitle-1]" >
+
+        <div class="row">
+          <div class="col">{{intitule[$index]}}</div>
+          <div class="col">{{machin}}</div>
+
+        </div>
+
+      </ion-item>
+    </ion-list>
+
+
+
+
+
   </ion-content>
 </ion-view>
+<--! nommedicament prix quantité-->
