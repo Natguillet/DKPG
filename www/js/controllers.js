@@ -1,4 +1,4 @@
- angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select'])
+angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select'])
 
 
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
@@ -95,40 +95,40 @@
   }
   var config =
   {
-  headers :
-{
-  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
- }
-   }
+    headers :
+    {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+    }
+  }
   $scope.alert = function(){
-  $http.post('http://localhost/PGS/PGS_WEB/update2.php', data, config)
-   .then(
-       function(response){
-         // success callback
-         alert("data.quantite");
-       },
-       function(response){
-         // failure callback
-         alert("Pas ok");
-       }
+    $http.post('http://localhost/PGS/PGS_WEB/update2.php', data, config)
+    .then(
+      function(response){
+        // success callback
+        alert("data.quantite");
+      },
+      function(response){
+        // failure callback
+        alert("Pas ok");
+      }
     );
   };
 })
 /*
-   $scope.alert = function ($scope) {
-    $http({
-        url: 'http://localhost/PGS/PGS_WEB/update2.php',
-        method: "POST",
-        data: { 'message' : "coucou"}
-    })
-    .then(function(response) {
-            // success
-            alert("OK");
-    },
-    function(response) { // optional
-            // failed
-            alert("NONOK");
-    });
+$scope.alert = function ($scope) {
+$http({
+url: 'http://localhost/PGS/PGS_WEB/update2.php',
+method: "POST",
+data: { 'message' : "coucou"}
+})
+.then(function(response) {
+// success
+alert("OK");
+},
+function(response) { // optional
+// failed
+alert("NONOK");
+});
 };
 })
 */
@@ -138,7 +138,7 @@
     $scope.stocks = data;
   });
 
-//  console.log($stateParams);
+  //  console.log($stateParams);
   $scope.stateParams={};
   $scope.stateParams=$stateParams;
   $scope.intitule=["ID:","Quantité:","Nom du médicament:","Prix:",
@@ -147,14 +147,14 @@
   "Unité de dispensation:","Unité de conditionnement:","Quantité minimum 1:",
   "Quantité minimum 2:"];
   //meme ordre que le JSON
-//id quantité nomM
-//prix dosage quantitedispboite
-//...
+  //id quantité nomM
+  //prix dosage quantitedispboite
+  //...
 })
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
-.controller('PharmacieCtrl',function($scope,$http, $ionicPopup){
+.controller('PharmacieCtrl',function($scope,$http, $ionicPopup, $cordovaFile){
   var stocks = [];
   var panier = $scope.panier=[];
   var select =[];
@@ -220,36 +220,42 @@
     return $scope.medic
   };
   $scope.valider = function(){
+    var modifs =[];
     for (var i = 0; i < $scope.panier.length; i++) {
-      delete $scope.panier[i].nb;
-      for (var j = 0; j < $scope.stocks.length; j++) {
-        if($scope.stocks[j].id === $scope.panier[i].id)$scope.stocks[j]=$scope.panier[i];
-      }
+      var modif = {
+        "quantite":0,
+        "id_medic":0,
+        "id_lot":0
+      };
+      modif.quantite = $scope.panier[i].nb;
+      modif.id_medic= $scope.panier[i].id;
+      //modif.id_lot = $scope.panier[i].id_lot;
+      modifs[i] = modif;
     }
     panier = $scope.panier = [];
     console.log(JSON.stringify(modifs));
     var filename = 'modif.txt';
     $cordovaFile.createFile('cordova.file.dataDirectory', filename, JSON.stringify(modifs), true)
-  .then(function (success) {
-    // success
-    console.log("Création réussite");
-    var alertPopup = $ionicPopup.alert({
-      title: 'GGGGGGG',
-      template: 'OUIIIIIIIIII'
-    });
-    alertPopup.then(function(res) {
-    });
-  }, function (error) {
-    /*var alertPopup = $ionicPopup.alert({
+    .then(function (success) {
+      // success
+      console.log("Création réussite");
+      var alertPopup = $ionicPopup.alert({
+        title: 'GGGGGGG',
+        template: 'OUIIIIIIIIII'
+      });
+      alertPopup.then(function(res) {
+      });
+    }, function (error) {
+      /*var alertPopup = $ionicPopup.alert({
       title: 'Echec',
       template: error
     });
     alertPopup.then(function(res) {
-    });
-    console.log(error); //error mappings are listed in the documentation
-    */
   });
-  };
+  console.log(error); //error mappings are listed in the documentation
+  */
+});
+};
 });
 
 /*.controller('registerLogin', function ($scope, $ionicPopup, $ionicListDelegate, pouchCollection)) {
