@@ -1,4 +1,4 @@
- angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file'])
+ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select'])
 
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
 
@@ -90,7 +90,6 @@
   $scope.stocks =[];
   $http.get('data/medicjson.json').success(function(data){
     $scope.stocks = data;
-
   });
 
 //  console.log($stateParams);
@@ -119,24 +118,18 @@
     stocks =data;
     console.log(stocks);
   })
-
-
-  $scope.clearSearch = function() {
-    $scope.text = '';
-  };
-  $scope.choixMedic = function(){
-    select =$scope.select = stocks[0];//Choix en dure d'un médicament
-  };
-  $scope.choixMedic2 = function(){
-    select =$scope.select = stocks[2]; //Choix en dure d'un médicament
-  };
+  $scope.shoutLoud = function(newValue, oldValue){
+    console.log(newValue);
+    $scope.select = newValue;
+    console.log($scope.select);
+  }
   $scope.ajouter = function(){
     for (var i = 0; i < panier.length; i++) {
       if($scope.panier[i].id === $scope.select.id){
         return;
       }
     }
-    if($scope.select.length != 0){
+    if($scope.select != null){
       if($scope.select.sous_ordonnance === "oui"){
         var alertPopup = $ionicPopup.alert({
           title: 'Médicament avec ordonnance',
@@ -149,7 +142,7 @@
       }
       $scope.select.quantite--;
       $scope.select.nb = 1;
-      $scope.panier.push(select);
+      $scope.panier.push($scope.select);
     }
   };
   $scope.plus = function(medic){
@@ -209,13 +202,14 @@
     alertPopup.then(function(res) {
     });
   }, function (error) {
-    var alertPopup = $ionicPopup.alert({
+    /*var alertPopup = $ionicPopup.alert({
       title: 'Echec',
       template: error
     });
     alertPopup.then(function(res) {
     });
     console.log(error); //error mappings are listed in the documentation
+    */
   });
   };
 });
