@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select'])
+angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select','ngStorage'])
 
 
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
@@ -176,31 +176,20 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
     stocks =data;
     console.log(stocks);
   })
-  $scope.salut = function(newValue){
+  $scope.search = function(newValue){
     console.log(newValue);
     $scope.select = newValue;
     ajouter();
   }
 var ajouter = function(){
     for (var i = 0; i < panier.length; i++) {
-      if(panier[i].id === select.id){
+      if(panier[i].id_medic === select.id_medic){
         return;
       }
     }
+    console.log($scope.select != null);
     if($scope.select != null){
       if($scope.select.sous_ordonnance === "oui"){
-          /*var confirmPopup = $ionicPopup.confirm({
-            title: 'Consume Ice Cream',
-            template: 'Are you sure you want to eat this ice cream?'
-          });
-
-          confirmPopup.then(function(res) {
-            if(res) {
-              console.log('You are sure');
-            } else {
-              console.log('You are not sure');
-            }
-          });*/
           alert($scope.select.nomM+" est sous ordonnance.\n Il faut ouvrir un dossier patient.");
       }
       else {
@@ -237,6 +226,9 @@ var ajouter = function(){
     $scope.panier[index].quantite += $scope.panier[index].nb;
     $scope.panier.splice($scope.panier.indexOf(medic),1);
   };
+  $scope.vider = function(){
+    $scope.panier =[];
+  }
   $scope.valider = function(){
     var modifs =[];
     for (var i = 0; i < $scope.panier.length; i++) {
@@ -246,13 +238,13 @@ var ajouter = function(){
         "id_lot":0
       };
       modif.quantite = $scope.panier[i].nb;
-      modif.id_medic= $scope.panier[i].id;
+      modif.id_medic= $scope.panier[i].id_medic;
       //modif.id_lot = $scope.panier[i].id_lot;
       modifs[i] = modif;
     }
     panier = $scope.panier = [];
     console.log(JSON.stringify(modifs));
-    var filename = 'modif.txt';
+    /*var filename = 'modif.txt';
     $cordovaFile.createFile('cordova.file.applicationStorageDirectory', filename, JSON.stringify(modifs), true)
     .then(function (success) {
       // success
@@ -260,9 +252,31 @@ var ajouter = function(){
     }, function (error) {
       console.log(error[1]);
       alert(error);
-});
+});*/
+window.localStorage.setItem("modif", JSON.stringify(modifs));
+$scope.loadData = function () {
+  alert(window.localStorage.getItem("modif"));
+}
 };
-});
+})
+// create a new factory
+.factory (‘StorageService’, function ($localStorage) {
+var _getAll = function () {
+  return $localStorage.things;
+};
+var _add = function (thing) {
+  $localStorage.things.push(thing);
+}
+var _remove = function (thing) {
+  $localStorage.things.splice($localStorage.things.indexOf(thing), 1);
+}
+return {
+    getAll: _getAll,
+    add: _add,
+    remove: _remove
+  };
+})
+;
 
 /*.controller('registerLogin', function ($scope, $ionicPopup, $ionicListDelegate, pouchCollection)) {
 var dbName = 'login-storage';

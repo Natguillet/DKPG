@@ -1,7 +1,7 @@
 <ion-view view-title="Pharmacie">
   <ion-content>
   <button class="button button-dark button-block" modal-select="" ng-model="select"
-  options="stocks" modal-select="" has-search="true" on-select="salut(newValue)">
+  options="stocks" modal-select="" has-search="true" on-select="search(newValue)">
   <i class="icon ion-medkit placeholder-icon"></i>
   Recherche
   <div class="option">
@@ -48,9 +48,14 @@
       </div>
     </ion-item>
   </div>
+  <button class="button button-assertive button-block" ng-click="vider()">
+    Vider le panier
+  </button>
   <button class="button button-balanced button-block" ng-click="valider()">
     Valider
   </button>
-</div>
+  <button class="button button-positive button-block" ng-click="loadData()">
+    Load Data
+  </button>
 </ion-content>
 </ion-view>
