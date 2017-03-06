@@ -188,7 +188,6 @@ var ajouter = function(){
       }
     }
     if($scope.select != null){
-      if($scope.select.sous_ordonnance === "oui"){
           /*var confirmPopup = $ionicPopup.confirm({
             title: 'Consume Ice Cream',
             template: 'Are you sure you want to eat this ice cream?'
@@ -201,13 +200,10 @@ var ajouter = function(){
               console.log('You are not sure');
             }
           });*/
-          alert($scope.select.nomM+" est sous ordonnance.\n Il faut ouvrir un dossier patient.");
-      }
-      else {
+          //alert($scope.select.nomM+" est sous ordonnance.\n Il faut ouvrir un dossier patient.");
         $scope.select.quantite--;
         $scope.select.nb = 1;
         $scope.panier.push($scope.select);
-      }
     }
   };
   $scope.plus = function(medic){
@@ -238,6 +234,12 @@ var ajouter = function(){
     $scope.panier.splice($scope.panier.indexOf(medic),1);
   };
   $scope.valider = function(){
+    if ($scope.select.sous_ordonnance=="oui")
+    {
+      alert($scope.select.nomM+" est sous ordonnance.\n Il faut ouvrir un dossier patient.");
+    }
+    else {
+
     var modifs =[];
     for (var i = 0; i < $scope.panier.length; i++) {
       var modif = {
@@ -273,6 +275,7 @@ var ajouter = function(){
   console.log(error); //error mappings are listed in the documentation
   */
 });
+}
 };
 });
 
