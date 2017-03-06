@@ -59,7 +59,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   $scope.intitule=["ID:","Facteur:","Nom:","Prenom:",
   "Adresse:","Email","Telephone:",
   "Date de Naissance:","Lieu de Naissance:"," Notes Importantes"];
- 
+
 })
 
 .controller('PatientsCtrl',function($scope,$http,$ionicFilterBar){
@@ -117,7 +117,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   };
 })
 
-.controller('AlertCtrl',function($scope,$http){git
+.controller('AlertCtrl',function($scope,$http){
   var data =
   {
     'quantite': '2'
