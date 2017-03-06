@@ -100,7 +100,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
 })
 .controller('StocksCtrl',function($scope,$http,$ionicFilterBar){
   $scope.stocks =[];
-  $http.get('data/medicjson.json').success(function(data){
+  $http.get('data/medic.json').success(function(data){
     $scope.stocks = data;
     console.log($scope.stocks);
   });
@@ -117,7 +117,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   };
 })
 
-.controller('AlertCtrl',function($scope,$http){git
+.controller('AlertCtrl',function($scope,$http){
   var data =
   {
     'quantite': '2'
@@ -130,40 +130,23 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
     }
   }
   $scope.alert = function(){
-    $http.post('http://localhost/PGS/PGS_WEB/update2.php', data, config)
-    .then(
-      function(response){
-        // success callback
-        alert("data.quantite");
-      },
-      function(response){
-        // failure callback
-        alert("Pas ok");
-      }
+  $http.post('http://localhost/PGS/PGS_WEB/update.php', data, config)
+   .then(
+       function(response){
+         // success callback
+         alert(data.quantite);
+       },
+       function(response){
+         // failure callback
+         alert("Pas ok");
+       }
     );
   };
 })
-/*
-$scope.alert = function ($scope) {
-$http({
-url: 'http://localhost/PGS/PGS_WEB/update2.php',
-method: "POST",
-data: { 'message' : "coucou"}
-})
-.then(function(response) {
-// success
-alert("OK");
-},
-function(response) { // optional
-// failed
-alert("NONOK");
-});
-};
-})
-*/
+
 .controller('StockCtrl', function ($scope,$http, $stateParams) {
   $scope.stocks =[];
-  $http.get('data/medicjson.json').success(function(data){
+  $http.get('data/medic.json').success(function(data){
     $scope.stocks = data;
   });
 
@@ -187,7 +170,7 @@ alert("NONOK");
   var stocks = [];
   var panier = $scope.panier=[];
   var select =[];
-  $http.get('data/medicjson.json').success(function(data){
+  $http.get('data/medic.json').success(function(data){
     $scope.stocks = data;
     console.log(data);
     stocks =data;
