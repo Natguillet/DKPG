@@ -130,37 +130,20 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
     }
   }
   $scope.alert = function(){
-    $http.post('http://localhost/PGS/PGS_WEB/update2.php', data, config)
-    .then(
-      function(response){
-        // success callback
-        alert("data.quantite");
-      },
-      function(response){
-        // failure callback
-        alert("Pas ok");
-      }
+  $http.post('http://localhost/PGS/PGS_WEB/update.php', data, config)
+   .then(
+       function(response){
+         // success callback
+         alert(data.quantite);
+       },
+       function(response){
+         // failure callback
+         alert("Pas ok");
+       }
     );
   };
 })
-/*
-$scope.alert = function ($scope) {
-$http({
-url: 'http://localhost/PGS/PGS_WEB/update2.php',
-method: "POST",
-data: { 'message' : "coucou"}
-})
-.then(function(response) {
-// success
-alert("OK");
-},
-function(response) { // optional
-// failed
-alert("NONOK");
-});
-};
-})
-*/
+
 .controller('StockCtrl', function ($scope,$http, $stateParams) {
   $scope.stocks =[];
   $http.get('data/medicjson.json').success(function(data){
