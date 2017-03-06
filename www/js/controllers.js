@@ -100,7 +100,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
 })
 .controller('StocksCtrl',function($scope,$http,$ionicFilterBar){
   $scope.stocks =[];
-  $http.get('data/medicjson.json').success(function(data){
+  $http.get('data/medic.json').success(function(data){
     $scope.stocks = data;
     console.log($scope.stocks);
   });
@@ -146,7 +146,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
 
 .controller('StockCtrl', function ($scope,$http, $stateParams) {
   $scope.stocks =[];
-  $http.get('data/medicjson.json').success(function(data){
+  $http.get('data/medic.json').success(function(data){
     $scope.stocks = data;
   });
 
@@ -170,7 +170,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   var stocks = [];
   var panier = $scope.panier=[];
   var select =[];
-  $http.get('data/medicjson.json').success(function(data){
+  $http.get('data/medic.json').success(function(data){
     $scope.stocks = data;
     console.log(data);
     stocks =data;
