@@ -59,7 +59,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   $scope.intitule=["ID:","Facteur:","Nom:","Prenom:",
   "Adresse:","Email","Telephone:",
   "Date de Naissance:","Lieu de Naissance:"," Notes Importantes"];
- 
+
 })
 
 .controller('PatientsCtrl',function($scope,$http,$ionicFilterBar){
@@ -270,25 +270,13 @@ var ajouter = function(){
     panier = $scope.panier = [];
     console.log(JSON.stringify(modifs));
     var filename = 'modif.txt';
-    $cordovaFile.createFile('cordova.file.dataDirectory', filename, JSON.stringify(modifs), true)
+    $cordovaFile.createFile('cordova.file.applicationStorageDirectory', filename, JSON.stringify(modifs), true)
     .then(function (success) {
       // success
-      console.log("Création réussite");
-      var alertPopup = $ionicPopup.alert({
-        title: 'GGGGGGG',
-        template: 'OUIIIIIIIIII'
-      });
-      alertPopup.then(function(res) {
-      });
+      alert('GGG');
     }, function (error) {
-      /*var alertPopup = $ionicPopup.alert({
-      title: 'Echec',
-      template: error
-    });
-    alertPopup.then(function(res) {
-  });
-  console.log(error); //error mappings are listed in the documentation
-  */
+      console.log(error[1]);
+      alert(error);
 });
 };
 });
