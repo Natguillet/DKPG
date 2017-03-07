@@ -166,7 +166,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
-.controller('PharmacieCtrl',function($scope,$http, $ionicPopup, $cordovaFile){
+.controller('PharmacieCtrl',function($scope,$http, $ionicPopup, $cordovaFile,StorageService){
   var stocks = [];
   var panier = $scope.panier=[];
   var select =[];
@@ -235,32 +235,31 @@ var ajouter = function(){
       var modif = {
         "quantite":0,
         "id_medic":0,
-        "id_lot":0
+        "id_lot":0,
+        "type":"retrait"
       };
       modif.quantite = $scope.panier[i].nb;
       modif.id_medic= $scope.panier[i].id_medic;
-      //modif.id_lot = $scope.panier[i].id_lot;
+      modif.id_lot = $scope.panier[i].id_lot;
       modifs[i] = modif;
     }
     panier = $scope.panier = [];
     console.log(JSON.stringify(modifs));
-    /*var filename = 'modif.txt';
-    $cordovaFile.createFile('cordova.file.applicationStorageDirectory', filename, JSON.stringify(modifs), true)
-    .then(function (success) {
-      // success
-      alert('GGG');
-    }, function (error) {
-      console.log(error[1]);
-      alert(error);
-});*/
-window.localStorage.setItem("modif", JSON.stringify(modifs));
-$scope.loadData = function () {
-  alert(window.localStorage.getItem("modif"));
-}
+    StorageService.add(JSON.stringify(modifs));
 };
+$scope.things = StorageService.getAll();
+$scope.loadData = function() {
+  alert($scope.things);
+}
+  $scope.remove = function (thing) {
+    StorageService.remove(thing);
+  };
 })
 // create a new factory
-.factory (‘StorageService’, function ($localStorage) {
+.factory ('StorageService', function ($localStorage) {
+  $localStorage = $localStorage.$default({
+  things: []
+});
 var _getAll = function () {
   return $localStorage.things;
 };

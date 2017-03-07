@@ -57,5 +57,11 @@
   <button class="button button-positive button-block" ng-click="loadData()">
     Load Data
   </button>
+  <ion-list show-delete="false" can-swipe="true">
+       <ion-item ng-repeat="thing in things">
+ {{thing}}
+       <ion-option-button class="button-assertive ion-trash-b" ng-click="remove(thing)"></ion-option-button>
+       </ion-item>
+     </ion-list>
 </ion-content>
 </ion-view>
