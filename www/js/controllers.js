@@ -189,14 +189,22 @@ var ajouter = function(){
     }
     console.log($scope.select != null);
     if($scope.select != null){
-      if($scope.select.sous_ordonnance === "oui"){
-          alert($scope.select.nomM+" est sous ordonnance.\n Il faut ouvrir un dossier patient.");
-      }
-      else {
+          /*var confirmPopup = $ionicPopup.confirm({
+            title: 'Consume Ice Cream',
+            template: 'Are you sure you want to eat this ice cream?'
+          });
+
+          confirmPopup.then(function(res) {
+            if(res) {
+              console.log('You are sure');
+            } else {
+              console.log('You are not sure');
+            }
+          });*/
+          //alert($scope.select.nomM+" est sous ordonnance.\n Il faut ouvrir un dossier patient.");
         $scope.select.quantite--;
         $scope.select.nb = 1;
         $scope.panier.push($scope.select);
-      }
     }
   };
   $scope.plus = function(medic){
@@ -230,6 +238,17 @@ var ajouter = function(){
     $scope.panier =[];
   }
   $scope.valider = function(){
+    var ord =0;
+    for (var i = 0; i < $scope.panier.length; i++)
+    {
+      if ($scope.panier[i].sous_ordonnance=="oui")
+      {
+        alert($scope.panier[i].nomM+" est sous ordonnance.\n Il faut ouvrir un dossier patient.");
+        ord =1;
+      }
+    }
+      if (ord==0)
+      {
     var modifs =[];
     for (var i = 0; i < $scope.panier.length; i++) {
       var modif = {
@@ -246,6 +265,7 @@ var ajouter = function(){
     panier = $scope.panier = [];
     console.log(JSON.stringify(modifs));
     StorageService.add(JSON.stringify(modifs));
+}
 };
 $scope.things = StorageService.getAll();
 $scope.loadData = function() {
