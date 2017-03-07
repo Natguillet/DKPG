@@ -262,20 +262,6 @@ var ajouter = function(){
       //modif.id_lot = $scope.panier[i].id_lot;
       modifs[i] = modif;
     }
-    var j=0;
-    for ( var i=0;i<$scope.stocks.length;i++)
-    {
-      console.log($scope.stocks[i].quantite);
-      if ($scope.stocks[i].quantite>0)
-      {
-        stocksint[j] = $scope.stocks[j];
-        j++;
-      }
-      else {
-        j--;
-      }
-    }
-    $scope.stocks = stocksint;
     console.log($scope.stocks);
     panier = $scope.panier = [];
     console.log(JSON.stringify(modifs));
@@ -302,6 +288,23 @@ var ajouter = function(){
 });
 }
 };
+
+$scope.showConfirm = function(medic) {
+  console.log("ok");
+  var confirmPopup = $ionicPopup.confirm({
+    title: 'Consume Ice Cream',
+    template: 'Voulez-vous vraiment supprimer ce medicament'
+  });
+  confirmPopup.then(function(res) {
+    if(res) {
+      console.log('You are sure');
+      $scope.supprimer(medic);
+    } else {
+      console.log('You are not sure');
+    }
+  });
+};
+
 });
 
 /*.controller('registerLogin', function ($scope, $ionicPopup, $ionicListDelegate, pouchCollection)) {

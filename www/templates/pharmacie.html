@@ -1,3 +1,4 @@
+
 <ion-view view-title="Pharmacie">
   <ion-content>
   <button class="button button-dark button-block" modal-select="" ng-model="select"
@@ -35,7 +36,7 @@
       </div>
       <div class="row">
         <div class="col">
-          <button class="button button-small button-assertive" ng-click="supprimer(medic)">
+          <button class="button button-small button-assertive" ng-click="showConfirm(medic)">
             Supprimer
           </button>
         </div>
@@ -55,5 +56,14 @@
   <button class="button button-balanced button-block" ng-click="valider()">
     Valider
   </button>
+  <button class="button button-positive button-block" ng-click="loadData()">
+    Load Data
+  </button>
+  <ion-list show-delete="false" can-swipe="true">
+       <ion-item ng-repeat="thing in things">
+ {{thing}}
+       <ion-option-button class="button-assertive ion-trash-b" ng-click="remove(thing)"></ion-option-button>
+       </ion-item>
+     </ion-list>
 </ion-content>
 </ion-view>
