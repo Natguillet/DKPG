@@ -170,6 +170,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   var stocks = [];
   var panier = $scope.panier=[];
   var select =[];
+  var stocksint = [];
   $http.get('data/medic.json').success(function(data){
     $scope.stocks = data;
     console.log(data);
@@ -261,6 +262,21 @@ var ajouter = function(){
       //modif.id_lot = $scope.panier[i].id_lot;
       modifs[i] = modif;
     }
+    var j=0;
+    for ( var i=0;i<$scope.stocks.length;i++)
+    {
+      console.log($scope.stocks[i].quantite);
+      if ($scope.stocks[i].quantite>0)
+      {
+        stocksint[j] = $scope.stocks[j];
+        j++;
+      }
+      else {
+        j--;
+      }
+    }
+    $scope.stocks = stocksint;
+    console.log($scope.stocks);
     panier = $scope.panier = [];
     console.log(JSON.stringify(modifs));
     var filename = 'modif.txt';
