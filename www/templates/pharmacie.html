@@ -1,11 +1,14 @@
 <ion-view view-title="Pharmacie">
   <ion-content>
   <button class="button button-dark button-block" modal-select="" ng-model="select"
-  options="stocks" modal-select="" has-search="true" on-select="search(newValue)">
+  options="stocks" modal-select="" has-search="true" on-select="search(newValue)" multiple=""
+  cancel-button="Fermer" modal-title="Selectionner les médicaments" hide-reset=false
+  search-placeholder="Recherche" cancel-search-button="Effacer">
   <i class="icon ion-medkit placeholder-icon"></i>
   Recherche
   <div class="option">
     {{option.nomM}}
+    {{option.quantite}}
   </div>
   </button>
   <!--<div class="list card">
