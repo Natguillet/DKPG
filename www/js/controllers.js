@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select'])
+angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select','ngCordova'])
 
 
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
@@ -9,7 +9,6 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -47,7 +46,7 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   };
 })
 
-.controller('PatientCtrl', function ($scope,$http, $stateParams) {
+.controller('PatientCtrl', function ($scope,$http, $stateParams, $cordovaCamera) {
   $scope.patients =[];
   $http.get('data/patient.json').success(function(data){
     $scope.patients = data;
@@ -59,8 +58,65 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   $scope.intitule=["ID:","Facteur:","Nom:","Prenom:",
   "Adresse:","Email","Telephone:",
   "Date de Naissance:","Lieu de Naissance:"," Notes Importantes"];
+  /*
+  $scope.takePicture = function (options) {
+    console.log("ok");
+     var options = {
+        quality : 75,
+        targetWidth: 200,
+        targetHeight: 200,
+        sourceType: 1
+     };
+
+     $cordovaCamera.getPicture(options).then(function(imageData) {
+        $scope.picture = imageData;;
+     }, function(err) {
+        console.log(err);
+     });
+
+  };
+*/
+$scope.takePicture = function() {
+       var options = {
+           quality : 75,
+           destinationType : Camera.DestinationType.DATA_URL,
+           sourceType : Camera.PictureSourceType.CAMERA,
+           allowEdit : true,
+           encodingType: Camera.EncodingType.JPEG,
+           targetWidth: 300,
+           targetHeight: 300,
+           popoverOptions: CameraPopoverOptions,
+           saveToPhotoAlbum: false
+       };
+
+       $cordovaCamera.getPicture(options).then(function(imageData) {
+           $scope.imgURI = "data:image/jpeg;base64," + imageData;
+       }, function(err) {
+           // An error occured. Show a message to the user
+       });
+   }
 
 })
+
+.factory('Camera', function($q) {
+
+return {
+  getPicture: function(options) {
+     var q = $q.defer();
+
+     navigator.camera.getPicture(function(result) {
+        q.resolve(result);
+     }, function(err) {
+        q.reject(err);
+     }, options);
+
+     return q.promise;
+  }
+}
+
+})
+
+
 
 .controller('PatientsCtrl',function($scope,$http,$ionicFilterBar){
   $scope.patients =[];

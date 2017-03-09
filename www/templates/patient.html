@@ -1,7 +1,7 @@
 <ion-view view-title="patient">
   <ion-content>
     <h1>{{patients[stateParams.patientTitle-1].nom}}</h1>
-
+    <button class="button" ng-click="takePicture()">Take Picture</button>
 
     <ion-list>
       <ion-item ng-repeat="machin in patients[stateParams.patientTitle-1]" >
@@ -14,10 +14,10 @@
 
       </ion-item>
     </ion-list>
-
-
+      <img ng-show="imgURI !== undefined" ng-src="{{imgURI}}">
 
 
 
   </ion-content>
+
 </ion-view>
