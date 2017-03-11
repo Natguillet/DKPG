@@ -156,22 +156,14 @@ return {
   ];
 })
 .controller('StocksCtrl',function($scope,$http,$ionicFilterBar,StorageService){
-  $scope.stocks =[];
-//  $scope.things = StorageService.getAll();
-//  $scope.stocks = $scope.things[0];
-  console.log($scope.stocks);
-  $http.get('data/medic.json').success(function(data){
-    $scope.stocks = data;
-    console.log($scope.stocks);
-  });
 
   $scope.showFilterBar = function () {
     var filterBarInstance = $ionicFilterBar.show({
       cancelText: "<i class='ion-ios-close-outline'></i>",
-      items: $scope.stocks,
+      items: $rootScope.stocks,
       filterProperties: ['nomM'],
       update: function (filteredItems, filterText) {
-        $scope.stocks = filteredItems;
+        $rootScope.stocks = filteredItems;
       }
     });
   };
@@ -205,13 +197,7 @@ return {
 })
 
 .controller('StockCtrl', function ($scope,$http, $stateParams,StorageService) {
-  $scope.stocks =[];
-  $scope.things = StorageService.getAll();
-  $scope.stocks = $scope.things[0];
-  /*$http.get('data/medic.json').success(function(data){
-    $scope.stocks = data;
-  });*/
-
+  $scope.stocks = StorageService.getMedic();
   //  console.log($stateParams);
   $scope.stateParams={};
   $scope.stateParams=$stateParams;
@@ -228,22 +214,12 @@ return {
 
 .controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
-.controller('PharmacieCtrl',function($scope,$http, $ionicPopup, $cordovaFile,StorageService){
+.controller('PharmacieCtrl',function($rootScope,$scope,$http, $ionicPopup, $cordovaFile,StorageService){
   $scope.things = StorageService.getAll();
   var panier = $scope.panier=[];
   var select =$scope.select =[];
-  //if ($scope.things[0] == null) {
-  $http.get('data/medic.json').success(function(data){
-    $scope.stocks = data;
-    console.log(data);
-    //StorageService.add(JSON.stringify(data));
-    //$scope.stocks = $scope.things[0];
-  })
-  //}
-  /*else {
-    $scope.stocks = $scope.things[0];
-    console.log($scope.stocks);
-  }*/
+  $rootScope.stocks = StorageService.getMedic();
+
   $scope.search = function(newValue){
     console.log(newValue);
     $scope.select = newValue;
@@ -341,15 +317,29 @@ $scope.showConfirm = function(medic) {
 
 
     StorageService.add(JSON.stringify(modifs));
-    console.log($scope);
-    //StorageService.update($scope.stocks,0);
-
+    //Mise à jour des médicements
+    for (var i = 0; i < modifs.length; i++) {
+      for (var j = 0; j < $rootScope.stocks.length; j++) {
+        if(modifs[i].id_medic === $rootScope.stocks[j].id_medic){
+          $rootScope.stocks[j].quantite -= modifs[i].quantite;
+        }
+      }
+    }
+    console.log($rootScope.stocks);
+}
+};
 $scope.loadData = function() {
   $http.get('data/medic.json').success(function(data){
-    $scope.stocks = data;
+    $rootScope.stocks = data;
     console.log(data);
-    StorageService.update(JSON.stringify(data),0);
+    StorageService.setMedic(JSON.stringify(data));
   })
+  $http.get('data/patient.json').success(function(data){
+    $scope.patients = data;
+    console.log(data);
+    StorageService.setPatient(JSON.stringify(data));
+  })
+  $scope.things = StorageService.getAll();
 }
   $scope.remove = function (thing) {
     StorageService.remove(thing);
@@ -370,14 +360,26 @@ var _add = function (thing) {
 var _remove = function (thing) {
   $localStorage.things.splice($localStorage.things.indexOf(thing), 1);
 }
-var _update = function (thing, index){
-  $localStorage.things[index] = thing;
+var _setMedic = function(thing){
+  $localStorage.things[0] = thing;
+}
+var _setPatient = function(thing){
+  $localStorage.things[1] = thing;
+}
+var _getMedic = function(){
+  return $localStorage.things[0];
+}
+var _getPatient = function(){
+  return $localStorage.things[1];
 }
 return {
     getAll: _getAll,
     add: _add,
     remove: _remove,
-    update: _update
+    getMedic: _getMedic,
+    getPatient: _getPatient,
+    setMedic: _setMedic,
+    setPatient: _setPatient
   };
 })
 ;
