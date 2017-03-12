@@ -36,15 +36,16 @@
       </div>
       <div class="row">
         <div class="col">
-          <button class="button button-small button-assertive" ng-click="supprimer(medic)">
+          <button class="button button-assertive" ng-click="supprimer(medic)">
             Supprimer
           </button>
         </div>
         <div class="col">
-          <button class="button button-icon icon ion-minus-round" ng-click="moins(medic)"></button>
+          <button class="button icon ion-minus-round button-dark" ng-click="moins(medic)">
+        </button>
         </div>
         <div class="col">
-          <button class="button button-icon icon ion-plus-round" ng-click="plus(medic)"></button>
+          <button class="button icon ion-plus button-dark" ng-click="plus(medic)"></button>
         </div>
         <div class="col">Quantité : {{medic.nb}}</div>
       </div>
@@ -55,9 +56,6 @@
   </button>
   <button class="button button-balanced button-block" ng-click="valider()">
     Valider
-  </button>
-  <button class="button button-positive button-block" ng-click="loadData()">
-    Load Data
   </button>
   <ion-list show-delete="false" can-swipe="true">
        <ion-item ng-repeat="thing in things">
