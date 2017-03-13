@@ -1,4 +1,5 @@
 {
   "name": "PGS_MOBILE",
-  "app_id": ""
+  "app_id": "",
+  "defaultBrowser": "chrome"
 }

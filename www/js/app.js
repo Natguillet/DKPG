@@ -108,6 +108,15 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
             }
         }
     })
+    .state('app.commande', {
+        url: '/commande',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/commande.html',
+                controller: 'CommandeCtrl'
+            }
+        }
+    })
     .state('app.alert', {
         url: '/alert',
         views: {

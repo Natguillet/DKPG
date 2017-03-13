@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select','ngCordova'])
+angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select','ngCordova','ngStorage'])
 
 
 .controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
@@ -290,14 +290,25 @@ var ajouter = function(medic){
       };
       modif.quantite = $scope.panier[i].nb;
       modif.id_medic= $scope.panier[i].id_medic;
-      //modif.id_lot = $scope.panier[i].id_lot;
+      modif.id_lot = $scope.panier[i].id_lot;
       modifs[i] = modif;
     }
     console.log($scope.stocks);
     panier = $scope.panier = [];
     console.log(JSON.stringify(modifs));
-}
+    StorageService.add(JSON.stringify(modifs));
+    //Mise à jour des médicements
+    for (var i = 0; i < modifs.length; i++) {
+      for (var j = 0; j < $rootScope.stocks.length; j++) {
+        if(modifs[i].id_medic === $rootScope.stocks[j].id_medic){
+          $rootScope.stocks[j].quantite -= modifs[i].quantite;
+        }
+      }
+    }
+    console.log($rootScope.stocks);
+  }
 };
+
 
 $scope.showConfirm = function(medic) {
   console.log("ok");
@@ -315,19 +326,6 @@ $scope.showConfirm = function(medic) {
   });
 };
 
-
-    StorageService.add(JSON.stringify(modifs));
-    //Mise à jour des médicements
-    for (var i = 0; i < modifs.length; i++) {
-      for (var j = 0; j < $rootScope.stocks.length; j++) {
-        if(modifs[i].id_medic === $rootScope.stocks[j].id_medic){
-          $rootScope.stocks[j].quantite -= modifs[i].quantite;
-        }
-      }
-    }
-    console.log($rootScope.stocks);
-}
-};
 $scope.loadData = function() {
   $http.get('data/medic.json').success(function(data){
     $rootScope.stocks = data;
@@ -345,6 +343,41 @@ $scope.loadData = function() {
     StorageService.remove(thing);
   };
 
+})
+
+.controller('CommandeCtrl', function ($scope, $stateParams,$ionicPopup) {
+
+  $scope.showConfirmsup = function() {
+    console.log("ok");
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Consume Ice Cream',
+      template: 'Voulez-vous vraiment annuler la commande ?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        console.log('You are sure');
+        //$scope.supprimer();
+      } else {
+        console.log('You are not sure');
+      }
+    });
+  };
+
+  $scope.showConfirmval = function() {
+    console.log("ok");
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Consume Ice Cream',
+      template: 'Voulez-vous vraiment commander ces médicaments ?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        console.log('You are sure');
+        //$scope.supprimer();
+      } else {
+        console.log('You are not sure');
+      }
+    });
+  };
 })
 // create a new factory
 .factory ('StorageService', function ($localStorage) {
