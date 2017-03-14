@@ -80,22 +80,13 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
         }
     })
 
-    .state('app.playlists', {
-        url: '/playlists',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/playlists.html',
-                controller: 'PlaylistsCtrl'
-            }
-        }
-    })
 
-    .state('app.singles', {
-        url: '/playlists/:playlistId',
+    .state('app.accueil', {
+        url: '/accueil',
         views: {
             'menuContent': {
-                templateUrl: 'templates/playlist.html',
-                controller: 'PlaylistCtrl'
+                templateUrl: 'templates/accueil.html',
+                controller: 'AccueilCtrl'
             }
         }
     })
@@ -127,5 +118,5 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
         }
     });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/playlists');
+    $urlRouterProvider.otherwise('/app/accueil');
 });

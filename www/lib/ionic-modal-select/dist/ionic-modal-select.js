@@ -188,12 +188,12 @@
 					if (!multiple) {
 						allOptions = angular.copy(nv);
 						scope.options = angular.copy(nv);
-					} /*else {
+					} else {
 						allOptions = nv.map(function (item, idx) {
 							return [idx, angular.copy(item)];
 						});
 						scope.options = angular.copy(allOptions);
-					}*/
+					}
 				}
 
 				// getting options template

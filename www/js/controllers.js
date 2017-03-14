@@ -1,7 +1,30 @@
 angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select','ngCordova','ngStorage'])
 
 
-.controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function ($http,StorageService,$rootScope,$scope, $ionicModal, $timeout) {
+
+  //initialisation
+  console.log(StorageService.getAll());
+  if(StorageService.getAll().length === 0)
+  {
+    $http.get('data/medic.json').success(function(data){
+      $rootScope.stocks = data;
+      console.log(data);
+      StorageService.setMedic(data);
+    })
+    $http.get('data/patient.json').success(function(data){
+      $scope.patients = data;
+      console.log(data);
+      StorageService.setPatient(data);
+    })
+  }
+
+
+  //SUPPRIMER TOUTE LA DATA
+/*var datas =StorageService.getAll();
+StorageService.remove(datas[0],1);
+console.log(datas)*/
+
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -46,7 +69,19 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   };
 })
 
-.controller('PatientCtrl', function ($scope,$http, $stateParams, $cordovaCamera) {
+.controller('AccueilCtrl', function ($http,$scope) {
+  $scope.data = {};
+
+    $scope.submit = function(){
+        var link = 'http://localhost/api.php';
+
+        $http.post(link, {nom : $scope.data.username}).then(function (res){
+            $scope.response = res.data;
+        });
+    };
+})
+
+.controller('PatientCtrl', function ($scope,$http, $stateParams) {
   $scope.patients =[];
   $http.get('data/patient.json').success(function(data){
     $scope.patients = data;
@@ -116,47 +151,19 @@ return {
 })
 
 .controller('PatientsCtrl',function($scope,$http,$ionicFilterBar,StorageService){
-    $scope.things = StorageService.getAll();
+  $scope.things = StorageService.getAll();
   $scope.patients =[];
   $http.get('data/patient.json').success(function(data){
     $scope.patients = data;
     console.log($scope.patients);
     if ($scope.things[1] == null) {
-      StorageService.add(JSON.stringify(data));
+      StorageService.add(data);
     }
   });
   })
 
-.controller('PlaylistsCtrl', function ($scope) {
-  $scope.playlists = [
-    {
-      title: 'Reggae',
-      id: 1
-    },
-    {
-      title: 'Chill',
-      id: 2
-    },
-    {
-      title: 'Dubstep',
-      id: 3
-    },
-    {
-      title: 'Indie',
-      id: 4
-    },
-    {
-      title: 'Rap',
-      id: 5
-    },
-    {
-      title: 'Cowbell',
-      id: 6
-    }
-  ];
-})
-.controller('StocksCtrl',function($scope,$http,$ionicFilterBar,StorageService){
-
+.controller('StocksCtrl',function($rootScope,$scope,$http,$ionicFilterBar,StorageService){
+  $rootScope.stocks = StorageService.getMedic();
   $scope.showFilterBar = function () {
     var filterBarInstance = $ionicFilterBar.show({
       cancelText: "<i class='ion-ios-close-outline'></i>",
@@ -211,8 +218,6 @@ return {
   //prix dosage quantitedispboite
   //...
 })
-
-.controller('PlaylistCtrl', function ($scope, $stateParams) {})
 
 .controller('PharmacieCtrl',function($rootScope,$scope,$http, $ionicPopup, $cordovaFile,StorageService){
   $scope.things = StorageService.getAll();
@@ -284,6 +289,7 @@ var ajouter = function(medic){
     var modifs =[];
     for (var i = 0; i < $scope.panier.length; i++) {
       var modif = {
+        "id_modif":0,
         "quantite":0,
         "id_medic":0,
         "id_lot":0
@@ -295,8 +301,8 @@ var ajouter = function(medic){
     }
     console.log($scope.stocks);
     panier = $scope.panier = [];
-    console.log(JSON.stringify(modifs));
-    StorageService.add(JSON.stringify(modifs));
+    console.log(modifs);
+    StorageService.add(modifs);
     //Mise à jour des médicements
     for (var i = 0; i < modifs.length; i++) {
       for (var j = 0; j < $rootScope.stocks.length; j++) {
@@ -326,19 +332,7 @@ $scope.showConfirm = function(medic) {
   });
 };
 
-$scope.loadData = function() {
-  $http.get('data/medic.json').success(function(data){
-    $rootScope.stocks = data;
-    console.log(data);
-    StorageService.setMedic(JSON.stringify(data));
-  })
-  $http.get('data/patient.json').success(function(data){
-    $scope.patients = data;
-    console.log(data);
-    StorageService.setPatient(JSON.stringify(data));
-  })
-  $scope.things = StorageService.getAll();
-}
+
   $scope.remove = function (thing) {
     StorageService.remove(thing);
   };

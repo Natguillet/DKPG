@@ -1,4 +1,3 @@
-
 <ion-view view-title="Pharmacie">
   <ion-content>
   <button class="button button-dark button-block" modal-select="" ng-model="select"
@@ -37,15 +36,16 @@
       </div>
       <div class="row">
         <div class="col">
-          <button class="button button-small button-assertive" ng-click="showConfirm(medic)">
+          <button class="button button-assertive" ng-click="showConfirm(medic)">
             Supprimer
           </button>
         </div>
         <div class="col">
-          <button class="button button-icon icon ion-minus-round" ng-click="moins(medic)"></button>
+          <button class="button icon ion-minus-round button-dark" ng-click="moins(medic)">
+        </button>
         </div>
         <div class="col">
-          <button class="button button-icon icon ion-plus-round" ng-click="plus(medic)"></button>
+          <button class="button icon ion-plus button-dark" ng-click="plus(medic)"></button>
         </div>
         <div class="col">Quantité : {{medic.nb}}</div>
       </div>
@@ -57,14 +57,13 @@
   <button class="button button-balanced button-block" ng-click="valider()">
     Valider
   </button>
-  <button class="button button-positive button-block" ng-click="loadData()">
-    Load Data
-  </button>
-  <!--<ion-list show-delete="false" can-swipe="true">
+  <ion-list show-delete="false" can-swipe="true">
+
+  <ion-list show-delete="false" can-swipe="true">
        <ion-item ng-repeat="thing in things">
  {{thing}}
        <ion-option-button class="button-assertive ion-trash-b" ng-click="remove(thing)"></ion-option-button>
        </ion-item>
-     </ion-list>-->
+     </ion-list>
 </ion-content>
 </ion-view>
