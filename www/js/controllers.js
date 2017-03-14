@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select','ngCordova','ngStorage'])
+angular.module('starter.controllers', ['ionic','ngCordova.plugins.file','ionic-modal-select','ngCordova','ngStorage'])
 
 
 .controller('AppCtrl', function ($http,StorageService,$rootScope,$scope, $ionicModal, $timeout) {
@@ -69,14 +69,18 @@ console.log(datas)*/
   };
 })
 
-.controller('AccueilCtrl', function ($http,$scope) {
+.controller('AccueilCtrl', function ($rootScope,$http,$scope,StorageService) {
   $scope.data = {};
 
     $scope.submit = function(){
-        var link = 'http://localhost/api.php';
+        var link = 'http://localhost/api2.php';
+        console.log($scope.data.username);
 
-        $http.post(link, {nom : $scope.data.username}).then(function (res){
+        $http.post(link, {username : $scope.data.username}).then(function (res){
             $scope.response = res.data;
+            StorageService.setMedic($scope.response);
+            $rootScope.stocks = StorageService.getMedic();
+            console.log($rootScope.stocks);
         });
     };
 })
@@ -393,11 +397,17 @@ var _setMedic = function(thing){
 var _setPatient = function(thing){
   $localStorage.things[1] = thing;
 }
+var _setUser = function(user){
+  $localStorage.user[0] = user;
+}
 var _getMedic = function(){
   return $localStorage.things[0];
 }
 var _getPatient = function(){
   return $localStorage.things[1];
+}
+var _getUser = function(){
+  return $localStorage.user[0];
 }
 return {
     getAll: _getAll,
@@ -405,20 +415,10 @@ return {
     remove: _remove,
     getMedic: _getMedic,
     getPatient: _getPatient,
+    getUser: _getUser,
     setMedic: _setMedic,
-    setPatient: _setPatient
+    setPatient: _setPatient,
+    setUser: _setUser
   };
 })
 ;
-
-
-/*.controller('registerLogin', function ($scope, $ionicPopup, $ionicListDelegate, pouchCollection)) {
-var dbName = 'login-storage';
-$scope.logs = pouchCollection(dbName);
-
-$scope.newLog = function(loginData){
-
-}
-
-
-}*/
