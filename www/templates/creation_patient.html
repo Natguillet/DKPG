@@ -1,44 +1,74 @@
 <ion-view view-title="patient">
   <ion-content>
+  <form ng-submit="doPatient()">
     <div>
-   		<label for="id-patient">ID:</label>
-   		<input type="text" id="ID" />
+   		<label  class="item item-input">
+      <span class="input-label"> ID: </span>
+   		<input type="text" id="ID" ng-model="patientData.ID"/>
+      </label>
+    </div>          
+    <div>
+   		 <label  class="item item-input">
+      <span class="input-label"> Nom facteur: </span>
+      <input type="text" id="ID" ng-model="patientData.nomfacteur"/>
+      </label>
     </div>
     <div>
-   		<label for="nom-facteur">Nom Facteur:</label>
-   		<input type="text" id="nom-facteur" />
+   		 <label  class="item item-input">
+      <span class="input-label"> Nom: </span>
+      <input type="text" id="ID" ng-model="patientData.nom"/>
+      </label>
     </div>
     <div>
-   		<label for="nom">Nom:</label>
-   		<input type="text" id="nom" />
+   		 <label  class="item item-input">
+      <span class="input-label"> Prenom: </span>
+      <input type="text" id="ID" ng-model="patientData.prenom"/>
+      </label>
     </div>
     <div>
-   		<label for="prenom">Prenom:</label>
-   		<input type="text" id="prenom" />
+   		 <label  class="item item-input">
+      <span class="input-label"> Adresse: </span>
+      <input type="text" id="ID" ng-model="patientData.adresse"/>
+      </label>
     </div>
     <div>
-   		<label for="adresse">Adresse:</label>
-   		<input type="text" id="adresse" />
+   		 <label  class="item item-input">
+      <span class="input-label"> Email: </span>
+      <input type="text" id="ID" ng-model="patientData.email"/>
+      </label>
     </div>
     <div>
-   		<label for="email">Email:</label>
-   		<input type="email" id="email" />
+   		 <label  class="item item-input">
+      <span class="input-label"> Phone: </span>
+      <input type="text" id="ID" ng-model="patientData.phone"/>
+      </label>
     </div>
     <div>
-   		<label for="phone">Phone:</label>
-   		<input type="text" id="phone" />
+   		 <label  class="item item-input">
+      <span class="input-label"> Birth-Date: </span>
+      <input type="text" id="ID" ng-model="patientData.birthdate"/>
+      </label>
     </div>
     <div>
-   		<label for="birth-date">Birth-Date:</label>
-   		<input type="text" id="birth-date" />
+   		 <label  class="item item-input">
+      <span class="input-label"> Birth-Date: </span>
+      <input type="text" id="ID" ng-model="patientData.birthdate"/>
+      </label>
     </div>
     <div>
-   		<label for="birth-place">Birth-Place:</label>
-   		<input type="text" id="birth-place" />
+   		 <label  class="item item-input">
+      <span class="input-label"> Note: </span>
+      <input type="text" id="ID" ng-model="patientData.note"/>
+      </label>
     </div>
     <div>
-   		<label for="note">Note:</label>
-   		<input type="text" id="note" />
+            <label class ="item">
+            <button class="button button-small button-assertive" type="submit" href=#/app/patients">
+            Créer Patient
+            </button>
+            </label>
     </div>
+    </form>
   </ion-content>
 </ion-view>
+

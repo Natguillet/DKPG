@@ -1,29 +1,29 @@
 <ion-view view-title="Pharmacie">
   <ion-content>
-  <button class="button button-dark button-block" modal-select="" ng-model="select"
-  options="stocks" modal-select="" has-search="true" on-select="search(newValue)" multiple=""
-  cancel-button="Fermer" modal-title="Selectionner les médicaments" hide-reset=false
-  search-placeholder="Recherche" cancel-search-button="Effacer">
-  <i class="icon ion-medkit placeholder-icon"></i>
-  Recherche
-  <div class="option">
-    {{option.nomM}}
-  </div>
+    <button class="button button-dark button-block" modal-select="" ng-model="select"
+    options="stocks" modal-select="" has-search="true" on-select="search(newValue)" multiple=""
+    cancel-button="Fermer" modal-title="Selectionner les médicaments" hide-reset=false
+    search-placeholder="Recherche" cancel-search-button="Effacer">
+    <i class="icon ion-medkit placeholder-icon"></i>
+    Recherche
+    <div class="option">
+      {{option.nomM}}
+    </div>
   </button>
   <!--<div class="list card">
-    {{select.nomM}}
-    {{select.quantite}}
-    {{select.DCI_nom}}
-  </div>-->
-  <div class="list card">
-    <ion-item ng-repeat="medic in panier" item="medic">
-      <div class="row">
-        <div class="col">{{medic.nomM}}</div>
-        <div class="col">{{medic.DCI_nom}}</div>
-        <div class="col"><span
-          ng-class=
-          "{'balanced-bg balanced-border':medic.quantite >=10,
-          'energized-bg energized-border':medic.quantite<10 && medic.quantite>=5,
+  {{select.nomM}}
+  {{select.quantite}}
+  {{select.DCI_nom}}
+</div>-->
+<div class="list card">
+  <ion-item ng-repeat="medic in panier" item="medic">
+    <div class="row">
+      <div class="col">{{medic.nomM}}</div>
+      <div class="col">{{medic.DCI_nom}}</div>
+      <div class="col"><span
+        ng-class=
+        "{'balanced-bg balanced-border':medic.quantite >=10,
+        'energized-bg energized-border':medic.quantite<10 && medic.quantite>=5,
           'assertive-bg assertive-border':medic.quantite<5}"
           style="
           color:white;
@@ -42,7 +42,7 @@
         </div>
         <div class="col">
           <button class="button icon ion-minus-round button-dark" ng-click="moins(medic)">
-        </button>
+          </button>
         </div>
         <div class="col">
           <button class="button icon ion-plus button-dark" ng-click="plus(medic)"></button>
@@ -58,12 +58,10 @@
     Valider
   </button>
   <ion-list show-delete="false" can-swipe="true">
-
-  <ion-list show-delete="false" can-swipe="true">
-       <ion-item ng-repeat="thing in things">
- {{thing}}
-       <ion-option-button class="button-assertive ion-trash-b" ng-click="remove(thing)"></ion-option-button>
-       </ion-item>
-     </ion-list>
+    <ion-item ng-repeat="medic in medics">
+      {{medic}}
+      <ion-option-button class="button-assertive ion-trash-b" ng-click="remove(thing)"></ion-option-button>
+    </ion-item>
+  </ion-list>
 </ion-content>
 </ion-view>
