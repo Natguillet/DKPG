@@ -42,8 +42,13 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   };
 })
 .controller('CreationPatientCtrl', function ($scope,$stateParams) {
+  console.log("ok");
+  $scope.patientData = {};
    $scope.go = function ( path ) {
     $location.path( path );
+  };
+  $scope.doPatient = function () {
+    console.log('Doing login',$scope.patientData);
   };
 })
 
