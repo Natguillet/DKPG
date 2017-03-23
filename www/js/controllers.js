@@ -339,7 +339,59 @@ $scope.showConfirm = function(medic) {
 
 })
 
-.controller('CommandeCtrl', function ($scope, $stateParams,$ionicPopup) {
+.controller('CommandeCtrl', function ($scope, $stateParams,$ionicPopup,StorageService,$rootScope,$cordovaFile) {
+  $scope.commande = {};
+  $scope.things = StorageService.getAll();
+  var panier = $scope.panier=[];
+  var select =$scope.select =[];
+  $rootScope.stocks = StorageService.getMedic();
+
+  $scope.supprimer = function(medic){
+    var index = $scope.panier.indexOf(medic);
+    $scope.panier[index].quantite += $scope.panier[index].nb;
+    $scope.panier.splice($scope.panier.indexOf(medic),1);
+  };
+  $scope.vider = function(){
+    var commandes = [];
+    for (var i=0;i<$scope.panier.length;i++)
+    {
+    $scope.com = {
+      "nomM":"",
+      "quantite":0
+    }
+    $scope.com.nomM=$scope.panier[i].nomM;
+    $scope.com.quantite = $scope.commande.quantite;
+    console.log($scope.com);
+  }
+    $scope.panier =[];
+  }
+
+  $scope.search = function(newValue){
+    console.log(newValue);
+    $scope.select = newValue;
+    for (var i = 0; i < $scope.select.length; i++) {
+      ajouter($scope.select[i]);
+    }
+  }
+
+  var ajouter = function(medic){
+      for (var i = 0; i < panier.length; i++) {
+        if(panier[i].id_medic === medic.id_medic){
+          return;
+        }
+      }
+      if(medic != null){
+          medic.quantite--;
+          medic.nb = 1;
+          $scope.panier.push(medic);
+      }
+    };
+
+    $scope.supprimer = function(medic){
+      var index = $scope.panier.indexOf(medic);
+      $scope.panier[index].quantite += $scope.panier[index].nb;
+      $scope.panier.splice($scope.panier.indexOf(medic),1);
+    };
 
   $scope.showConfirmsup = function() {
     console.log("ok");
@@ -350,6 +402,7 @@ $scope.showConfirm = function(medic) {
     confirmPopup.then(function(res) {
       if(res) {
         console.log('You are sure');
+        $scope.vider();
         //$scope.supprimer();
       } else {
         console.log('You are not sure');
@@ -358,13 +411,22 @@ $scope.showConfirm = function(medic) {
   };
 
   $scope.showConfirmval = function() {
-    console.log("ok");
+    /*
+    var panierC = "";
+    console.log($scope.commande);
+    for (var i=0;i<panier.length;i++)
+    {
+      console.log("ok");
+      var panierC = panierC + panier[i].nomM + ":";
+    }
+    */
     var confirmPopup = $ionicPopup.confirm({
       title: 'Consume Ice Cream',
       template: 'Voulez-vous vraiment commander ces médicaments ?'
     });
     confirmPopup.then(function(res) {
       if(res) {
+        $scope.vider();
         console.log('You are sure');
         //$scope.supprimer();
       } else {
