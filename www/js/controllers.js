@@ -194,11 +194,11 @@ return {
   //  console.log($stateParams);
   $scope.stateParams={};
   $scope.stateParams=$stateParams;
-  $scope.intitule=["ID:","Quantité:","Nom du médicament:","Prix:",
-  "Dosage:","Quantité de dispensation dans une boite:","Nom DCI:",
-  "Unité de prescription:","Forme:","Médicament sous ordonnance?",
-  "Unité de dispensation:","Unité de conditionnement:","Quantité minimum 1:",
-  "Quantité minimum 2:"];
+  $scope.intitule=["Nom du Médicament:","Prix:","Sous Ordonnance ?","Quantité:",
+  "Dosage:","Date de péremption:","Quantité de dispensation:","Forme:",
+  "Nom DCI:","ID du médicament:","Unité de prescription:",
+  "Unité de dispensation:","Unité de conditionnement:","ID du lot",
+  "Code Barre:","Nom de l'utilisateur:","Prénom de l'utilisateur","Mot de passe de l'utilisateur:","Nom du groupe régional","ID de l'utilisateur"];
   //meme ordre que le JSON
   //id quantité nomM
   //prix dosage quantitedispboite
