@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar'])
+angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar','ngCordova'])
 
 .run(function ($ionicPlatform) {
     $ionicPlatform.ready(function () {
@@ -41,7 +41,7 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
             }
         }
     })
-    
+
     .state('app.medicament', {
         url: '/stocks/:stockTitle',
         views: {
@@ -51,7 +51,7 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
             }
         }
     })
-    
+
     .state('app.patients', {
         url: '/patients',
         views: {
@@ -79,23 +79,14 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
             }
         }
     })
-    
-    .state('app.playlists', {
-        url: '/playlists',
-        views: {
-            'menuContent': {
-                templateUrl: 'templates/playlists.html',
-                controller: 'PlaylistsCtrl'
-            }
-        }
-    })
 
-    .state('app.singles', {
-        url: '/playlists/:playlistId',
+
+    .state('app.accueil', {
+        url: '/accueil',
         views: {
             'menuContent': {
-                templateUrl: 'templates/playlist.html',
-                controller: 'PlaylistCtrl'
+                templateUrl: 'templates/accueil.html',
+                controller: 'AccueilCtrl'
             }
         }
     })
@@ -105,6 +96,15 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
             'menuContent': {
                 templateUrl: 'templates/pharmacie.html',
                 controller: 'PharmacieCtrl'
+            }
+        }
+    })
+    .state('app.commande', {
+        url: '/commande',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/commande.html',
+                controller: 'CommandeCtrl'
             }
         }
     })
@@ -118,5 +118,5 @@ angular.module('starter', ['ionic', 'starter.controllers','jett.ionic.filter.bar
         }
     });
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/app/playlists');
+    $urlRouterProvider.otherwise('/app/accueil');
 });

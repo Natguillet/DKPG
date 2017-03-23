@@ -1,7 +1,17 @@
-angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.file','ionic-modal-select','ngStorage'])
+angular.module('starter.controllers', ['ionic','ngCordova.plugins.file','ionic-modal-select','ngCordova','ngStorage'])
 
 
-.controller('AppCtrl', function ($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function ($http,StorageService,$rootScope,$scope, $ionicModal, $timeout) {
+
+  //initialisation
+  console.log(StorageService.getUser());
+
+
+  //SUPPRIMER TOUTE LA DATA
+/*var datas =StorageService.getAll();
+StorageService.remove(datas[0],1);
+console.log(datas)*/
+
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -9,7 +19,6 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   // listen for the $ionicView.enter event:
   //$scope.$on('$ionicView.enter', function(e) {
   //});
-
   // Form data for the login modal
   $scope.loginData = {};
 
@@ -52,109 +61,136 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   };
 })
 
-.controller('PatientCtrl', function ($scope,$http, $stateParams) {
-  $scope.patients =[];
-  $http.get('data/patient.json').success(function(data){
-    $scope.patients = data;
+.controller('AccueilCtrl', function ($rootScope,$http,$scope,StorageService) {
+  $scope.data = {};
 
-  });
+    $scope.submit = function(){
+      StorageService.removeAll();
+        var link = 'http://localhost/api2.php';
+        var linkPatient ='http://localhost/api3.php';
+        console.log($scope.data.username);
+
+        $http.post(link, {username : $scope.data.username}).then(function (res){
+            $scope.response = res.data;
+            console.log($scope.response.length);
+            for (var i = 0; i < $scope.response.length; i++) {
+              StorageService.pushMedic($scope.response[i]);
+            }
+            StorageService.setUser($scope.data.username);
+        });
+        $http.post(linkPatient, {username : $scope.data.username}).then(function (res){
+            $scope.response = res.data;
+            console.log($scope.response.length);
+            for (var i = 0; i < $scope.response.length; i++) {
+              StorageService.pushPatient($scope.response[i]);
+            }
+        });
+    };
+})
+
+.controller('PatientCtrl', function (StorageService,$scope,$http, $stateParams) {
+  $scope.patients = StorageService.getAllPatient();;
+
 //  console.log($stateParams);
   $scope.stateParams={};
   $scope.stateParams=$stateParams;
   $scope.intitule=["ID:","Facteur:","Nom:","Prenom:",
   "Adresse:","Email","Telephone:",
   "Date de Naissance:","Lieu de Naissance:"," Notes Importantes"];
+  /*
+  $scope.takePicture = function (options) {
+    console.log("ok");
+     var options = {
+        quality : 75,
+        targetWidth: 200,
+        targetHeight: 200,
+        sourceType: 1
+     };
+
+     $cordovaCamera.getPicture(options).then(function(imageData) {
+        $scope.picture = imageData;;
+     }, function(err) {
+        console.log(err);
+     });
+
+  };
+*/
+$scope.takePicture = function() {
+       var options = {
+           quality : 75,
+           destinationType : Camera.DestinationType.DATA_URL,
+           sourceType : Camera.PictureSourceType.CAMERA,
+           allowEdit : true,
+           encodingType: Camera.EncodingType.JPEG,
+           targetWidth: 300,
+           targetHeight: 300,
+           popoverOptions: CameraPopoverOptions,
+           saveToPhotoAlbum: false
+       };
+
+       $cordovaCamera.getPicture(options).then(function(imageData) {
+           $scope.imgURI = "data:image/jpeg;base64," + imageData;
+       }, function(err) {
+           // An error occured. Show a message to the user
+       });
+   }
 
 })
 
-.controller('PatientsCtrl',function($scope,$http,$ionicFilterBar){
-  $scope.patients =[];
-  $http.get('data/patient.json').success(function(data){
-    $scope.patients = data;
-    console.log($scope.patients);
-  });
+.factory('Camera', function($q) {
+
+return {
+  getPicture: function(options) {
+     var q = $q.defer();
+
+     navigator.camera.getPicture(function(result) {
+        q.resolve(result);
+     }, function(err) {
+        q.reject(err);
+     }, options);
+
+     return q.promise;
+  }
+}
+
+})
+
+.controller('PatientsCtrl',function($scope,$http,$ionicFilterBar,StorageService){
+  $scope.patients =StorageService.getAllPatient();
   })
 
-.controller('PlaylistsCtrl', function ($scope) {
-  $scope.playlists = [
-    {
-      title: 'Reggae',
-      id: 1
-    },
-    {
-      title: 'Chill',
-      id: 2
-    },
-    {
-      title: 'Dubstep',
-      id: 3
-    },
-    {
-      title: 'Indie',
-      id: 4
-    },
-    {
-      title: 'Rap',
-      id: 5
-    },
-    {
-      title: 'Cowbell',
-      id: 6
-    }
-  ];
-})
-.controller('StocksCtrl',function($scope,$http,$ionicFilterBar){
-  $scope.stocks =[];
-  $http.get('data/medic.json').success(function(data){
-    $scope.stocks = data;
-    console.log($scope.stocks);
-  });
-
+.controller('StocksCtrl',function($rootScope,$scope,$http,$ionicFilterBar,StorageService){
+  $rootScope.stocks = StorageService.getAllMedic();
   $scope.showFilterBar = function () {
     var filterBarInstance = $ionicFilterBar.show({
       cancelText: "<i class='ion-ios-close-outline'></i>",
-      items: $scope.stocks,
+      items: $rootScope.stocks,
       filterProperties: ['nomM'],
       update: function (filteredItems, filterText) {
-        $scope.stocks = filteredItems;
+        $rootScope.stocks = filteredItems;
       }
     });
   };
 })
 
-.controller('AlertCtrl',function($scope,$http){
-  var data =
-  {
-    'quantite': '2'
-  }
-  var config =
-  {
-    headers :
-    {
-      'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
-    }
-  }
-  $scope.alert = function(){
-  $http.post('http://localhost/PGS/PGS_WEB/update.php', data, config)
-   .then(
-       function(response){
-         // success callback
-         alert(data.quantite);
-       },
-       function(response){
-         // failure callback
-         alert("Pas ok");
-       }
-    );
-  };
+.controller('AlertCtrl',function($scope,$http,StorageService){
+  $scope.listModif = StorageService.getAllModif();
+  $scope.listCommande = StorageService.getAllCommande();
+  $scope.data = {};
+
+    $scope.alert = function(){
+        var link = 'http://localhost/api4.php';
+
+        $http.post(link, {modifs : $scope.listModif}).then(function (res){
+            $scope.response = res.data;
+            console.log($scope.response);
+        });
+    };
+
 })
 
-.controller('StockCtrl', function ($scope,$http, $stateParams) {
-  $scope.stocks =[];
-  $http.get('data/medic.json').success(function(data){
-    $scope.stocks = data;
-  });
-
+.controller('StockCtrl', function ($scope,$http, $stateParams,StorageService) {
+  $scope.stocks = StorageService.getAllMedic();
   //  console.log($stateParams);
   $scope.stateParams={};
   $scope.stateParams=$stateParams;
@@ -169,47 +205,31 @@ angular.module('starter.controllers', ['ionic', 'pouchdb','ngCordova.plugins.fil
   //...
 })
 
-.controller('PlaylistCtrl', function ($scope, $stateParams) {})
-
-.controller('PharmacieCtrl',function($scope,$http, $ionicPopup, $cordovaFile,StorageService){
-  var stocks = [];
+.controller('PharmacieCtrl',function($rootScope,$scope,$http, $ionicPopup, $cordovaFile,StorageService){
+  $scope.medics = StorageService.getAllMedic();
+  $scope.listModif = StorageService.getAllModif();
   var panier = $scope.panier=[];
-  var select =[];
-  $http.get('data/medic.json').success(function(data){
-    $scope.stocks = data;
-    console.log(data);
-    stocks =data;
-    console.log(stocks);
-  })
+  var select =$scope.select =[];
+  $rootScope.stocks = StorageService.getAllMedic();
+
   $scope.search = function(newValue){
+    $rootScope.stocks = StorageService.getAllMedic();
     console.log(newValue);
     $scope.select = newValue;
-    ajouter();
+    for (var i = 0; i < $scope.select.length; i++) {
+      ajouter($scope.select[i]);
+    }
   }
-var ajouter = function(){
+var ajouter = function(medic){
     for (var i = 0; i < panier.length; i++) {
-      if(panier[i].id_medic === select.id_medic){
+      if(panier[i].id_medic === medic.id_medic){
         return;
       }
     }
-    console.log($scope.select != null);
-    if($scope.select != null){
-          /*var confirmPopup = $ionicPopup.confirm({
-            title: 'Consume Ice Cream',
-            template: 'Are you sure you want to eat this ice cream?'
-          });
-
-          confirmPopup.then(function(res) {
-            if(res) {
-              console.log('You are sure');
-            } else {
-              console.log('You are not sure');
-            }
-          });*/
-          //alert($scope.select.nomM+" est sous ordonnance.\n Il faut ouvrir un dossier patient.");
-        $scope.select.quantite--;
-        $scope.select.nb = 1;
-        $scope.panier.push($scope.select);
+    if(medic != null){
+        medic.quantite--;
+        medic.nb = 1;
+        $scope.panier.push(medic);
     }
   };
   $scope.plus = function(medic){
@@ -266,49 +286,164 @@ var ajouter = function(){
       modif.id_medic= $scope.panier[i].id_medic;
       modif.id_lot = $scope.panier[i].id_lot;
       modifs[i] = modif;
+      StorageService.pushModif(modif)
     }
+    console.log($scope.stocks);
     panier = $scope.panier = [];
-    console.log(JSON.stringify(modifs));
-    StorageService.add(JSON.stringify(modifs));
-}
+    $scope.listModif = StorageService.getAllModif();
+    //Mise à jour des médicements
+    for (var i = 0; i < modifs.length; i++) {
+      for (var j = 0; j < $rootScope.stocks.length; j++) {
+        if(modifs[i].id_medic === $rootScope.stocks[j].id_medic){
+          $rootScope.stocks[j].quantite -= modifs[i].quantite;
+        }
+      }
+    }
+    console.log($rootScope.stocks);
+  }
 };
-$scope.things = StorageService.getAll();
-$scope.loadData = function() {
-  alert($scope.things);
-}
+
+
+$scope.showConfirm = function(medic) {
+  console.log("ok");
+  var confirmPopup = $ionicPopup.confirm({
+    title: 'Consume Ice Cream',
+    template: 'Voulez-vous vraiment supprimer ce medicament'
+  });
+  confirmPopup.then(function(res) {
+    if(res) {
+      console.log('You are sure');
+      $scope.supprimer(medic);
+    } else {
+      console.log('You are not sure');
+    }
+  });
+};
+
+
   $scope.remove = function (thing) {
     StorageService.remove(thing);
+  };
+
+})
+
+.controller('CommandeCtrl', function ($scope, $stateParams,$ionicPopup) {
+
+  $scope.showConfirmsup = function() {
+    console.log("ok");
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Consume Ice Cream',
+      template: 'Voulez-vous vraiment annuler la commande ?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        console.log('You are sure');
+        //$scope.supprimer();
+      } else {
+        console.log('You are not sure');
+      }
+    });
+  };
+
+  $scope.showConfirmval = function() {
+    console.log("ok");
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Consume Ice Cream',
+      template: 'Voulez-vous vraiment commander ces médicaments ?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        console.log('You are sure');
+        //$scope.supprimer();
+      } else {
+        console.log('You are not sure');
+      }
+    });
   };
 })
 // create a new factory
 .factory ('StorageService', function ($localStorage) {
   $localStorage = $localStorage.$default({
-  things: []
+  user: [],
+  medics:[],
+  patients:[],
+  modifs:[],
+  commandes:[]
 });
-var _getAll = function () {
-  return $localStorage.things;
+var _setMedic = function (index,medic) {
+  $localStorage.medics[index] = medic;
 };
-var _add = function (thing) {
-  $localStorage.things.push(thing);
+var _getMedic = function (index) {
+  return $localStorage.medics[index];
+}
+var _pushMedic = function (medic) {
+  $localStorage.medics.push(medic);
+}
+var _getAllMedic = function () {
+  return $localStorage.medics;
+}
+var _setPatient = function(index,patient){
+  $localStorage.patients[index]=patient;
+}
+var _getPatient = function(index){
+  return $localStorage.patients[index];
+}
+var _getAllPatient = function(){
+  return $localStorage.patients;
+}
+var _pushPatient = function(patient){
+  $localStorage.patients.push(patient);
+}
+var _getUser = function(){
+  return $localStorage.user[0];
+}
+var _setUser = function (user) {
+  $localStorage.user[0]=user;
+}
+var _pushUser = function(user){
+  if($localStorage.user.length == 0) $localStorage.user.push(user);
+}
+var _getAllModif = function() {
+  return $localStorage.modifs;
+}
+var _pushModif = function(modif){
+  $localStorage.modifs.push(modif);
+}
+var _getAllCommande = function() {
+  return $localStorage.commandes;
+}
+var _pushCommande = function(commande){
+  $localStorage.commandes.push(commande);
 }
 var _remove = function (thing) {
-  $localStorage.things.splice($localStorage.things.indexOf(thing), 1);
+  $localStorage.modifs.splice($localStorage.modifs.indexOf(thing), 1);
+}
+var _removeAll = function(){
+  $localStorage.medics =[];
+  $localStorage.patients =[];
+  $localStorage.modifs = [];
+  $localStorage.commandes = [];
+  $localStorage.user = [];
 }
 return {
-    getAll: _getAll,
-    add: _add,
-    remove: _remove
+    setMedic:_setMedic,
+    getMedic:_getMedic,
+    pushMedic:_pushMedic,
+    getAllMedic:_getAllMedic,
+    setPatient:_setPatient,
+    getPatient:_getPatient,
+    getAllPatient:_getAllPatient,
+    pushPatient:_pushPatient,
+    getUser:_getUser,
+    setUser:_setUser,
+    pushUser:_pushUser,
+    pushModif:_pushModif,
+    pushCommande:_pushCommande,
+    getAllCommande:_getAllCommande,
+    getAllModif:_getAllModif,
+    remove:_remove,
+    removeAll:_removeAll
   };
 })
+
 ;
-
-/*.controller('registerLogin', function ($scope, $ionicPopup, $ionicListDelegate, pouchCollection)) {
-var dbName = 'login-storage';
-$scope.logs = pouchCollection(dbName);
-
-$scope.newLog = function(loginData){
-
-}
-
-
-}*/
