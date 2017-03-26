@@ -328,11 +328,17 @@ $scope.showConfirm = function(medic) {
 })
 
 .controller('CommandeCtrl', function ($scope, $stateParams,$ionicPopup,StorageService,$rootScope,$cordovaFile) {
-  $scope.commande = {};
+/*  $scope.commande = {};
   $scope.things = StorageService.getAll();
   var panier = $scope.panier=[];
   var select =$scope.select =[];
-  $rootScope.stocks = StorageService.getMedic();
+  $rootScope.stocks = StorageService.getAllMedic();*/
+  $scope.commande = {};
+  $scope.medics = StorageService.getAllMedic();
+  $scope.listModif = StorageService.getAllModif();
+  var panier = $scope.panier=[];
+  var select =$scope.select =[];
+  $rootScope.stocks = StorageService.getAllMedic();
 
   $scope.supprimer = function(medic){
     var index = $scope.panier.indexOf(medic);
