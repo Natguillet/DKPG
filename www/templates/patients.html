@@ -1,10 +1,12 @@
 <ion-view view-title="patients" ng-controller="PatientsCtrl">
   <ion-content>
-  <button class="button button-avanced button-block" ng-click="go('/creation_patient')">
-    Création Patient
-  </button>
     <ion-list>
-      <ion-item ng-repeat="patient in patients" href="#/app/patients/{{patient.id_patient}}">
+    	<ion-item href="#/app/creation_patient">
+       		<button class="button button-dark button-block">
+            Créer Patient
+            </button>
+        </ion-item>
+        <ion-item ng-repeat="patient in patients" href="#/app/patients/{{patient.id_patient}}">
         <div class="row">
           <div class="col">{{patient.nom}}</div>
           <div class="col">{{patient.prenom}}</div>

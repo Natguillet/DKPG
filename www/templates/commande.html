@@ -19,14 +19,35 @@
     <ion-item ng-repeat="medic in panier" item="medic">
       <div class="row">
         <div class="col">{{medic.nomM}}</div>
-        <div class="col">{{medic.DCI_nom}}</div>
-   </div>
- </div>
- <button class="button button-assertive button-block" ng-click="showConfirmsup()">
-   Annuler la commande
- </button>
- <button class="button button-balanced button-block" ng-click="showConfirmval()">
-   Commander
- </button>
- </ion-content>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button class="button button-assertive" ng-click="supprimer(medic)">
+            Supprimer
+          </button>
+        </div>
+        <div class="col">
+          <label class="item item-input">
+            <span class="input-label" placeholder="Entrer votre commande">Commande : </span>
+            <input type="number" ng-model="medic.quantite">
+          </label>
+      </div>
+      </div>
+    </ion-item>
+  </div>
+  <button class="button button-assertive button-block" ng-click="showConfirmsup()">
+    Annuler la commande
+    </button>
+  <button class="button button-balanced button-block" ng-click="showConfirmval()">
+    Commander
+  </button>
+  <ion-list show-delete="false" can-swipe="true">
+
+  <ion-list show-delete="false" can-swipe="true">
+       <ion-item ng-repeat="thing in things">
+ {{thing}}
+       <ion-option-button class="button-assertive ion-trash-b" ng-click="remove(thing)"></ion-option-button>
+       </ion-item>
+     </ion-list>
+</ion-content>
 </ion-view>

@@ -51,8 +51,13 @@ console.log(datas)*/
   };
 })
 .controller('CreationPatientCtrl', function ($scope,$stateParams) {
+  console.log("ok");
+  $scope.patientData = {};
    $scope.go = function ( path ) {
     $location.path( path );
+  };
+  $scope.doPatient = function () {
+    console.log('Doing login',$scope.patientData);
   };
 })
 
@@ -61,8 +66,8 @@ console.log(datas)*/
 
     $scope.submit = function(){
       StorageService.removeAll();
-        var link = 'http://localhost/api2.php';
-        var linkPatient ='http://localhost/api3.php';
+        var link = 'http://192.168.43.112/api2.php';
+        var linkPatient ='http://192.168.43.112/api3.php';
         console.log($scope.data.username);
 
         $http.post(link, {username : $scope.data.username}).then(function (res){
@@ -174,11 +179,11 @@ return {
   $scope.data = {};
 
     $scope.alert = function(){
-        var link = 'http://localhost/api4.php';
-
-        $http.post(link, {modifs : $scope.listModif}).then(function (res){
+        var link = 'http://192.168.43.112/update.php';
+        $http.post(link, {type : $scope.listModif[0].type,quantite:$scope.listModif[0].quantite,id_medic:$scope.listModif[0].id_medic,id_lot:$scope.listModif[0].id_lot}).then(function (res){
             $scope.response = res.data;
-            console.log($scope.response);
+            console.log(res.data);
+            StorageService.remove($scope.listModif[0]);
         });
     };
 
@@ -189,11 +194,11 @@ return {
   //  console.log($stateParams);
   $scope.stateParams={};
   $scope.stateParams=$stateParams;
-  $scope.intitule=["ID:","Quantité:","Nom du médicament:","Prix:",
-  "Dosage:","Quantité de dispensation dans une boite:","Nom DCI:",
-  "Unité de prescription:","Forme:","Médicament sous ordonnance?",
-  "Unité de dispensation:","Unité de conditionnement:","Quantité minimum 1:",
-  "Quantité minimum 2:"];
+  $scope.intitule=["Nom du Médicament:","Prix:","Sous Ordonnance ?","Quantité:",
+  "Dosage:","Date de péremption:","Quantité de dispensation:","Forme:",
+  "Nom DCI:","ID du médicament:","Unité de prescription:",
+  "Unité de dispensation:","Unité de conditionnement:","ID du lot",
+  "Code Barre:","Nom de l'utilisateur:","Prénom de l'utilisateur","Mot de passe de l'utilisateur:","Nom du groupe régional","ID de l'utilisateur"];
   //meme ordre que le JSON
   //id quantité nomM
   //prix dosage quantitedispboite
@@ -282,7 +287,7 @@ var ajouter = function(medic){
       modif.id_medic= $scope.panier[i].id_medic;
       modif.id_lot = $scope.panier[i].id_lot;
       modifs[i] = modif;
-      StorageService.pushModif(modif)
+      StorageService.pushModif(modif);
     }
     console.log($scope.stocks);
     panier = $scope.panier = [];
@@ -323,7 +328,65 @@ $scope.showConfirm = function(medic) {
 
 })
 
-.controller('CommandeCtrl', function ($scope, $stateParams,$ionicPopup) {
+.controller('CommandeCtrl', function ($scope, $stateParams,$ionicPopup,StorageService,$rootScope,$cordovaFile) {
+/*  $scope.commande = {};
+  $scope.things = StorageService.getAll();
+  var panier = $scope.panier=[];
+  var select =$scope.select =[];
+  $rootScope.stocks = StorageService.getAllMedic();*/
+  $scope.commande = {};
+  $scope.medics = StorageService.getAllMedic();
+  $scope.listModif = StorageService.getAllModif();
+  var panier = $scope.panier=[];
+  var select =$scope.select =[];
+  $rootScope.stocks = StorageService.getAllMedic();
+
+  $scope.supprimer = function(medic){
+    var index = $scope.panier.indexOf(medic);
+    $scope.panier[index].quantite += $scope.panier[index].nb;
+    $scope.panier.splice($scope.panier.indexOf(medic),1);
+  }
+  $scope.vider = function(){
+    var commandes = [];
+    for (var i=0;i<$scope.panier.length;i++)
+    {
+    $scope.com = {
+      "id_medic":"",
+      "quantite":0,
+      "type":"commande"
+    }
+    $scope.com.id_medic=$scope.panier[i].id_medic;
+    $scope.com.quantite = $scope.panier[i].quantite;
+    console.log($scope.com);
+    StorageService.pushModif($scope.com);
+  }
+    $scope.panier =[];
+  }
+
+  $scope.search = function(newValue){
+    console.log(newValue);
+    $scope.select = newValue;
+    for (var i = 0; i < $scope.select.length; i++) {
+      ajouter($scope.select[i]);
+    }
+  }
+
+  var ajouter = function(medic){
+      for (var i = 0; i < $scope.panier.length; i++) {
+        if(panier[i].id_medic === medic.id_medic){
+          return;
+        }
+      }
+      if(medic != null){
+          $scope.panier.push(medic);
+      }
+    };
+
+    $scope.supprimer = function(medic){
+      var index = $scope.panier.indexOf(medic);
+      $scope.panier[index].quantite += $scope.panier[index].nb;
+      $scope.panier.splice($scope.panier.indexOf(medic),1);
+    };
 
   $scope.showConfirmsup = function() {
     console.log("ok");
@@ -334,6 +397,7 @@ $scope.showConfirm = function(medic) {
     confirmPopup.then(function(res) {
       if(res) {
         console.log('You are sure');
+        $scope.vider();
         //$scope.supprimer();
       } else {
         console.log('You are not sure');
@@ -342,13 +406,22 @@ $scope.showConfirm = function(medic) {
   };
 
   $scope.showConfirmval = function() {
-    console.log("ok");
+    /*
+    var panierC = "";
+    console.log($scope.commande);
+    for (var i=0;i<panier.length;i++)
+    {
+      console.log("ok");
+      var panierC = panierC + panier[i].nomM + ":";
+    }
+    */
     var confirmPopup = $ionicPopup.confirm({
       title: 'Consume Ice Cream',
       template: 'Voulez-vous vraiment commander ces médicaments ?'
     });
     confirmPopup.then(function(res) {
       if(res) {
+        $scope.vider();
         console.log('You are sure');
         //$scope.supprimer();
       } else {
