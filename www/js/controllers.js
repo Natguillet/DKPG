@@ -198,6 +198,7 @@ return {
   //id quantité nomM
   //prix dosage quantitedispboite
   //...
+  console.log($scope.stateParams);
 })
 
 .controller('PharmacieCtrl',function($rootScope,$scope,$http, $ionicPopup, $cordovaFile,StorageService){
