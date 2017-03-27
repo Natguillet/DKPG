@@ -66,8 +66,8 @@ console.log(datas)*/
 
     $scope.submit = function(){
       StorageService.removeAll();
-        var link = 'http://192.168.43.112/api2.php';
-        var linkPatient ='http://192.168.43.112/api3.php';
+        var link = 'http://192.168.43.85/api2.php';
+        var linkPatient ='http://192.168.43.85/api3.php';
         console.log($scope.data.username);
 
         $http.post(link, {username : $scope.data.username}).then(function (res){
@@ -179,7 +179,7 @@ return {
   $scope.data = {};
 
     $scope.alert = function(){
-        var link = 'http://192.168.43.112/update.php';
+        var link = 'http://192.168.43.85/update.php';
         $http.post(link, {type : $scope.listModif[0].type,quantite:$scope.listModif[0].quantite,id_medic:$scope.listModif[0].id_medic,id_lot:$scope.listModif[0].id_lot}).then(function (res){
             $scope.response = res.data;
             console.log(res.data);
